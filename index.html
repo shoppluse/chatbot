@@ -24,8 +24,7 @@
       <h1>Single-Page Multi-Game Arcade</h1>
       <p>
         A professional, structured single-page arcade platform. One website for the user,
-        modular architecture for the developer. This Phase 1 includes the full UI foundation,
-        state system, achievements, sound, confetti, leaderboard, and scalable game slots.
+        modular architecture for the developer. Phase 2 connects the first 4 real game modules.
       </p>
     </section>
 
@@ -37,7 +36,7 @@
           <div class="section-title">
             <h2>Select a Game</h2>
           </div>
-          <p class="sub">All games run inside this same page. In Phase 1, game panels are placeholders ready for Phase 2 and 3 logic modules.</p>
+          <p class="sub">Phase 2 now activates the first 4 real games: Tic Tac Toe, RPS, Reaction, and Memory.</p>
 
           <div class="games-grid">
             <div class="game-card">
@@ -110,39 +109,48 @@
 
           <p class="arena-desc" id="arenaDesc">Game description will appear here.</p>
 
-          <!-- Placeholder panels for Phase 2/3 -->
+          <!-- REAL GAME PANELS (Phase 2) -->
           <div id="ticTacToe" class="game-panel hidden">
-            <div class="placeholder-panel">
-              <div class="placeholder-icon">⭕</div>
-              <h3>Tic Tac Toe Module Slot</h3>
-              <p>Phase 2 will connect the real game logic here.</p>
+            <div class="center-wrap">
+              <div class="ttt-board" id="tttBoard"></div>
             </div>
+            <div class="status-box" id="tttStatus">Player X's turn</div>
           </div>
 
           <div id="rps" class="game-panel hidden">
-            <div class="placeholder-panel">
-              <div class="placeholder-icon">✊</div>
-              <h3>Rock Paper Scissors Module Slot</h3>
-              <p>Phase 2 will connect the real game logic here.</p>
+            <div class="rps-buttons">
+              <button class="btn rps-btn" id="rpsRockBtn">🪨 Rock</button>
+              <button class="btn rps-btn" id="rpsPaperBtn">📄 Paper</button>
+              <button class="btn rps-btn" id="rpsScissorsBtn">✂️ Scissors</button>
+            </div>
+            <div class="rps-result" id="rpsResult">Choose Rock, Paper, or Scissors to begin.</div>
+            <div class="stats-row">
+              <div class="stat-pill">Wins: <span id="rpsWins">0</span></div>
+              <div class="stat-pill">Losses: <span id="rpsLosses">0</span></div>
+              <div class="stat-pill">Draws: <span id="rpsDraws">0</span></div>
             </div>
           </div>
 
           <div id="reaction" class="game-panel hidden">
-            <div class="placeholder-panel">
-              <div class="placeholder-icon">⚡</div>
-              <h3>Reaction Test Module Slot</h3>
-              <p>Phase 2 will connect the real game logic here.</p>
+            <div class="reaction-box" id="reactionBox">Click Restart to begin the test.</div>
+            <div class="stats-row">
+              <div class="stat-pill">Best Time: <span id="reactionBest">--</span></div>
+              <div class="stat-pill">Last Time: <span id="reactionLast">--</span></div>
             </div>
           </div>
 
           <div id="memory" class="game-panel hidden">
-            <div class="placeholder-panel">
-              <div class="placeholder-icon">🧠</div>
-              <h3>Memory Match Module Slot</h3>
-              <p>Phase 2 will connect the real game logic here.</p>
+            <div class="center-wrap">
+              <div class="memory-grid" id="memoryGrid"></div>
             </div>
+            <div class="stats-row">
+              <div class="stat-pill">Moves: <span id="memoryMoves">0</span></div>
+              <div class="stat-pill">Matches: <span id="memoryMatches">0</span>/8</div>
+            </div>
+            <div class="status-box" id="memoryStatus">Find all matching pairs.</div>
           </div>
 
+          <!-- PLACEHOLDERS (Phase 3) -->
           <div id="mole" class="game-panel hidden">
             <div class="placeholder-panel">
               <div class="placeholder-icon">🔨</div>
@@ -227,6 +235,12 @@
   <script src="js/confetti.js"></script>
   <script src="js/achievements.js"></script>
   <script src="js/ui.js"></script>
+
+  <!-- GAME MODULES (Phase 2) -->
+  <script src="js/games/tictactoe.js"></script>
+  <script src="js/games/rps.js"></script>
+  <script src="js/games/reaction.js"></script>
+  <script src="js/games/memory.js"></script>
 
   <!-- APP BOOT -->
   <script src="script.js"></script>
