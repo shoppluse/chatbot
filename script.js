@@ -99,9 +99,24 @@ function openGame(gameId) {
   });
 
   AchievementManager.unlock("first_play");
+
+  // Phase 2 real game initializers
+  if (gameId === "ticTacToe" && window.TicTacToeGame) {
+    TicTacToeGame.init();
+  } else if (gameId === "rps" && window.RPSGame) {
+    RPSGame.init();
+  } else if (gameId === "reaction" && window.ReactionGame) {
+    ReactionGame.init();
+  } else if (gameId === "memory" && window.MemoryGame) {
+    MemoryGame.init();
+  }
 }
 
 function backToMenu() {
+  if (window.ReactionGame && typeof ReactionGame.cleanup === "function") {
+    ReactionGame.cleanup();
+  }
+
   AppState.currentGame = null;
 
   UI.showMenu();
@@ -116,8 +131,17 @@ function backToMenu() {
 function restartCurrentGame() {
   if (!AppState.currentGame) return;
 
-  // In Phase 1 this simply refreshes placeholder view.
-  openGame(AppState.currentGame);
+  if (AppState.currentGame === "ticTacToe" && window.TicTacToeGame) {
+    TicTacToeGame.init();
+  } else if (AppState.currentGame === "rps" && window.RPSGame) {
+    RPSGame.init();
+  } else if (AppState.currentGame === "reaction" && window.ReactionGame) {
+    ReactionGame.init();
+  } else if (AppState.currentGame === "memory" && window.MemoryGame) {
+    MemoryGame.init();
+  } else {
+    openGame(AppState.currentGame);
+  }
 }
 
 function resetLeaderboard() {
@@ -133,6 +157,10 @@ function resetLeaderboard() {
   keysToReset.forEach(key => localStorage.removeItem(key));
   UI.renderLeaderboard();
   SoundManager.beep(300, 0.05);
+
+  if (window.ReactionGame && typeof ReactionGame.syncUI === "function") {
+    ReactionGame.syncUI();
+  }
 }
 
 /* =========================
