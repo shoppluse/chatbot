@@ -12,308 +12,343 @@
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     }
 
+    :root {
+      --bg: #071019;
+      --card: rgba(255,255,255,0.04);
+      --card-border: rgba(255,255,255,0.08);
+      --text: #f5f7fa;
+      --muted: #b8c2cc;
+      --accent: #61f0e7;
+      --accent-dark: #05181c;
+    }
+
     body {
-      background: linear-gradient(135deg, #0f0f0f, #1b1b1b);
-      color: #fff;
+      background:
+        radial-gradient(circle at top right, rgba(97, 240, 231, 0.08), transparent 35%),
+        linear-gradient(135deg, #04060a 0%, #0a0f18 50%, #05070d 100%);
+      color: var(--text);
       min-height: 100vh;
       padding: 20px;
     }
 
-    .editor-container {
-      max-width: 1000px;
+    .wrap {
+      max-width: 1100px;
       margin: 0 auto;
       background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 24px;
-      padding: 25px;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.35);
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      backdrop-filter: blur(14px);
     }
 
     h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #66d9d0;
       font-size: 2rem;
+      margin-bottom: 10px;
+      color: var(--accent);
     }
 
-    .info {
-      text-align: center;
-      color: #d6d6d6;
-      margin-bottom: 25px;
-      line-height: 1.6;
+    .sub {
+      color: var(--muted);
+      margin-bottom: 24px;
+      line-height: 1.7;
     }
 
-    .form-group {
+    .group {
       margin-bottom: 18px;
     }
 
     label {
       display: block;
       margin-bottom: 8px;
-      font-weight: 600;
-      color: #e8e8e8;
+      font-weight: 700;
+      color: #eef6fb;
     }
 
     input, textarea {
       width: 100%;
-      padding: 14px;
-      border-radius: 14px;
       border: 1px solid rgba(255,255,255,0.08);
       background: rgba(255,255,255,0.04);
       color: #fff;
+      border-radius: 16px;
+      padding: 14px 16px;
       outline: none;
       font-size: 1rem;
-      transition: 0.3s ease;
+      transition: 0.25s ease;
     }
 
     input:focus, textarea:focus {
-      border-color: #66d9d0;
-      box-shadow: 0 0 0 3px rgba(102, 217, 208, 0.12);
+      border-color: rgba(97, 240, 231, 0.35);
+      box-shadow: 0 0 0 3px rgba(97, 240, 231, 0.08);
     }
 
     textarea {
       resize: vertical;
-      min-height: 90px;
+      min-height: 120px;
+      line-height: 1.6;
     }
 
-    .btn-row {
+    .big-textarea {
+      min-height: 420px;
+      white-space: pre-wrap;
+    }
+
+    .help {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      background: rgba(255,255,255,0.02);
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .btns {
       display: flex;
-      flex-wrap: wrap;
       gap: 12px;
-      margin-top: 25px;
+      flex-wrap: wrap;
+      margin-top: 24px;
     }
 
-    button, .go-btn {
+    button, a.btn-link {
       border: none;
-      padding: 14px 22px;
-      border-radius: 50px;
       cursor: pointer;
+      padding: 14px 20px;
+      border-radius: 999px;
       font-size: 1rem;
-      font-weight: bold;
+      font-weight: 800;
       text-decoration: none;
-      transition: 0.3s ease;
+      transition: 0.25s ease;
     }
 
     .save-btn {
-      background: #66d9d0;
-      color: #111;
+      background: linear-gradient(135deg, #61f0e7, #4ad0c8);
+      color: #041014;
+      box-shadow: 0 10px 24px rgba(97, 240, 231, 0.16);
     }
 
     .save-btn:hover {
-      background: #7ef7ed;
       transform: translateY(-2px);
     }
 
     .reset-btn {
-      background: #2b2b2b;
+      background: rgba(255,255,255,0.06);
       color: #fff;
       border: 1px solid rgba(255,255,255,0.08);
     }
 
     .reset-btn:hover {
-      background: #3a3a3a;
+      background: rgba(255,255,255,0.1);
     }
 
-    .go-btn {
-      background: #ffffff;
-      color: #111;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+    .btn-link {
+      background: #fff;
+      color: #0a1018;
     }
 
-    .go-btn:hover {
-      background: #f0f0f0;
+    .btn-link:hover {
       transform: translateY(-2px);
     }
 
-    .preview-box {
-      margin-top: 25px;
-      background: rgba(255,255,255,0.02);
-      border-radius: 18px;
-      padding: 18px;
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .preview-box h3 {
-      margin-bottom: 12px;
-      color: #66d9d0;
-    }
-
-    .preview-box img {
-      width: 100%;
-      max-height: 350px;
-      object-fit: cover;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.08);
+    .msg {
       display: none;
-    }
-
-    .message {
-      margin-top: 18px;
-      padding: 12px 16px;
-      border-radius: 12px;
-      display: none;
-      font-weight: 600;
-    }
-
-    .success {
-      background: rgba(102, 217, 208, 0.12);
-      border: 1px solid rgba(102, 217, 208, 0.3);
-      color: #7ef7ed;
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(97, 240, 231, 0.1);
+      color: #9afbf5;
+      border: 1px solid rgba(97, 240, 231, 0.2);
+      font-weight: 700;
     }
 
     @media (max-width: 768px) {
-      .editor-container {
+      .wrap {
         padding: 18px;
       }
 
-      h1 {
-        font-size: 1.6rem;
+      .btns > * {
+        width: 100%;
+        text-align: center;
       }
 
-      button, .go-btn {
-        width: 100%;
-        justify-content: center;
+      .big-textarea {
+        min-height: 320px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="editor-container">
-    <h1>Edit Daily Class Content</h1>
-    <p class="info">
-      Update today's class topic here. Click <strong>Save Content</strong> and it will automatically appear in <strong>index.html</strong>.
+  <div class="wrap">
+    <h1>Edit Daily Class Presentation</h1>
+    <p class="sub">
+      Update your topic here.  
+      <strong>Content Pages:</strong> separate each page using <strong>---PAGE---</strong><br>
+      <strong>Images:</strong> add one image URL per line
     </p>
 
-    <div class="form-group">
+    <div class="group">
       <label for="title">Title</label>
-      <input type="text" id="title" placeholder="Enter class topic title" />
+      <input type="text" id="title" placeholder="Enter title">
     </div>
 
-    <div class="form-group">
-      <label for="subtitle">Subtitle / Introduction</label>
-      <textarea id="subtitle" placeholder="Enter short introduction"></textarea>
+    <div class="group">
+      <label for="subtitle">Subtitle</label>
+      <textarea id="subtitle" placeholder="Enter subtitle"></textarea>
     </div>
 
-    <div class="form-group">
-      <label for="point1">Point 1</label>
-      <textarea id="point1" placeholder="Enter point 1"></textarea>
-    </div>
-
-    <div class="form-group">
-      <label for="point2">Point 2</label>
-      <textarea id="point2" placeholder="Enter point 2"></textarea>
-    </div>
-
-    <div class="form-group">
-      <label for="point3">Point 3</label>
-      <textarea id="point3" placeholder="Enter point 3"></textarea>
-    </div>
-
-    <div class="form-group">
-      <label for="stat1">Highlight / Key Stat 1</label>
-      <textarea id="stat1" placeholder="Enter highlight 1"></textarea>
-    </div>
-
-    <div class="form-group">
-      <label for="stat2">Highlight / Key Stat 2</label>
-      <textarea id="stat2" placeholder="Enter highlight 2"></textarea>
-    </div>
-
-    <div class="form-group">
-      <label for="stat3">Highlight / Key Stat 3</label>
-      <textarea id="stat3" placeholder="Enter highlight 3"></textarea>
-    </div>
-
-    <div class="form-group">
+    <div class="group">
       <label for="footerNote">Footer Note</label>
-      <input type="text" id="footerNote" placeholder="Enter footer note" />
+      <input type="text" id="footerNote" placeholder="Enter footer note">
     </div>
 
-    <div class="form-group">
-      <label for="imageUrl">Image URL</label>
-      <input type="text" id="imageUrl" placeholder="Paste image URL here" oninput="previewImage()" />
+    <div class="group">
+      <label for="contentPages">Content Pages (use ---PAGE--- between pages)</label>
+      <textarea id="contentPages" class="big-textarea" placeholder="Enter content pages here..."></textarea>
+      <div class="help">
+        Example:<br><br>
+        Page 1 content here...<br>
+        ---PAGE---<br>
+        Page 2 content here...<br><br>
+        <strong>Important:</strong> line breaks are preserved exactly in <code>index.html</code>, so verses will stay line by line.
+      </div>
     </div>
 
-    <div class="preview-box">
-      <h3>Image Preview</h3>
-      <img id="imagePreview" alt="Image Preview">
+    <div class="group">
+      <label for="images">Image URLs (one per line)</label>
+      <textarea id="images" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg&#10;https://example.com/image3.jpg"></textarea>
     </div>
 
-    <div class="btn-row">
-      <button class="save-btn" onclick="saveContent()">Save Content</button>
-      <button class="reset-btn" onclick="resetContent()">Reset Content</button>
-      <a class="go-btn" href="index.html">Go to Main Page</a>
+    <div class="btns">
+      <button class="save-btn" onclick="saveData()">Save Content</button>
+      <button class="reset-btn" onclick="resetData()">Reset Saved Content</button>
+      <a href="index.html" class="btn-link">Open Main Page</a>
     </div>
 
-    <div class="message success" id="successMsg">Content saved successfully! Open index.html to view changes.</div>
+    <div class="msg" id="msg">Content saved successfully! Open index.html to view changes.</div>
   </div>
 
   <script>
-    function loadExistingContent() {
-      const savedData = JSON.parse(localStorage.getItem("dailyClassContent"));
+    const defaultData = {
+      title: "I am not this body",
+      subtitle: "The first lesson of spiritual life begins when we understand that the self is different from the temporary material body.",
+      footerNote: "“I am not this body; I am the eternal soul” — the foundational truth of spiritual life.",
+      contentPages: [
+`1. The Linguistic and Analytical Facet/Aspect
 
-      if (savedData) {
-        document.getElementById("title").value = savedData.title || "";
-        document.getElementById("subtitle").value = savedData.subtitle || "";
-        document.getElementById("point1").value = savedData.point1 || "";
-        document.getElementById("point2").value = savedData.point2 || "";
-        document.getElementById("point3").value = savedData.point3 || "";
-        document.getElementById("stat1").value = savedData.stat1 || "";
-        document.getElementById("stat2").value = savedData.stat2 || "";
-        document.getElementById("stat3").value = savedData.stat3 || "";
-        document.getElementById("footerNote").value = savedData.footerNote || "";
-        document.getElementById("imageUrl").value = savedData.imageUrl || "";
+The most immediate proof that you are not the body is found in how you describe yourself.
+When you speak of your body parts, you say, "my hand," "my leg," or "my head"; you never say, "I hand" or "I leg".
 
-        previewImage();
-      }
+Just as you say, "this is my book" or "this is my shirt," implying you are the owner and distinct from the object, you are the owner or occupier of the body and not the body itself.
+
+Do this Activity:
+Ask them: What is this?
+Show your hand, head, etc...`,
+
+`Reference 1: (ARRIVAL ADDRESS July 20th 1971 New York)
+
+Lecture - Bhagavad-gītā 2.1, August 1st 1972, Glasgow
+
+https://vedabase.io/en/library/transcripts/720801bggla/#bb198142
+
+Verse:
+dehino 'smin yathā dehe
+kaumāraṁ yauvanaṁ jarā
+tathā dehāntaraṁ prāptir
+dhīras tatra na muhyati
+[Bg. 2.13]`,
+
+`Asmin dehe, in this body, there is a proprietor of this body. Just like I am proprietor of my body, you are proprietor of your body.
+
+I say "my hand." I don't say "I hand." It is my hand. So I am different from this hand.
+
+Just like say, "It is my book", so book is different from me. "It is my table."
+
+Similarly, "my hand," "my eyes," "my leg," "my this," "my that."
+But where I am? What I am?`,
+
+`Reference 2: Lecture, Bhagavad-gītā 13.1 - 2, December 29, 1972, Bombay
+
+https://vedabase.io/en/library/transcripts/721229bgbom/#bb217955
+
+Kṣetra-kṣetra-jñam. Just like we are living in this apartment and we know that I am not this apartment, but I am living in this apartment.
+
+That is being cleared by Kṛṣṇa Himself.
+Idaṁ śarīraṁ kaunteya kṣetram ity abhidhīyate [Bg 13.2].`,
+
+`So we should know this, that "I am not this body; it is my body."
+
+If we analyze the body, I say,
+"It is my hand."
+"It is my leg."
+"It is my head."
+
+Nobody says "I head" or "I hand."
+
+"I" is different from this body.
+
+Just as a person lives in an apartment but is different from it, the soul lives in the body but is never the body itself.`
+      ],
+      images: [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Krishna_and_Arjuna_on_the_chariot%2C_18th-19th_century%2C_India.jpg/800px-Krishna_and_Arjuna_on_the_chariot%2C_18th-19th_century%2C_India.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Bhagavad_Gita_-_Krishna_and_Arjuna.jpg/800px-Bhagavad_Gita_-_Krishna_and_Arjuna.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Krishna-Arjuna.jpg/800px-Krishna-Arjuna.jpg"
+      ]
+    };
+
+    function loadSavedData() {
+      const saved = JSON.parse(localStorage.getItem("dailyClassPresentation")) || defaultData;
+
+      document.getElementById("title").value = saved.title || "";
+      document.getElementById("subtitle").value = saved.subtitle || "";
+      document.getElementById("footerNote").value = saved.footerNote || "";
+      document.getElementById("contentPages").value = (saved.contentPages || []).join("\n\n---PAGE---\n\n");
+      document.getElementById("images").value = (saved.images || []).join("\n");
     }
 
-    function saveContent() {
-      const contentData = {
-        title: document.getElementById("title").value,
-        subtitle: document.getElementById("subtitle").value,
-        point1: document.getElementById("point1").value,
-        point2: document.getElementById("point2").value,
-        point3: document.getElementById("point3").value,
-        stat1: document.getElementById("stat1").value,
-        stat2: document.getElementById("stat2").value,
-        stat3: document.getElementById("stat3").value,
-        footerNote: document.getElementById("footerNote").value,
-        imageUrl: document.getElementById("imageUrl").value
+    function saveData() {
+      const title = document.getElementById("title").value.trim();
+      const subtitle = document.getElementById("subtitle").value.trim();
+      const footerNote = document.getElementById("footerNote").value.trim();
+
+      const rawPages = document.getElementById("contentPages").value;
+      const rawImages = document.getElementById("images").value;
+
+      const contentPages = rawPages
+        .split("---PAGE---")
+        .map(p => p.trim())
+        .filter(Boolean);
+
+      const images = rawImages
+        .split("\n")
+        .map(img => img.trim())
+        .filter(Boolean);
+
+      const data = {
+        title: title || defaultData.title,
+        subtitle: subtitle || defaultData.subtitle,
+        footerNote: footerNote || defaultData.footerNote,
+        contentPages: contentPages.length ? contentPages : defaultData.contentPages,
+        images: images.length ? images : defaultData.images
       };
 
-      localStorage.setItem("dailyClassContent", JSON.stringify(contentData));
+      localStorage.setItem("dailyClassPresentation", JSON.stringify(data));
 
-      const msg = document.getElementById("successMsg");
+      const msg = document.getElementById("msg");
       msg.style.display = "block";
-
       setTimeout(() => {
         msg.style.display = "none";
       }, 2500);
     }
 
-    function resetContent() {
-      if (confirm("Are you sure you want to clear all saved content?")) {
-        localStorage.removeItem("dailyClassContent");
-        location.reload();
+    function resetData() {
+      if (confirm("Are you sure you want to remove all saved content and restore default data?")) {
+        localStorage.removeItem("dailyClassPresentation");
+        loadSavedData();
       }
     }
 
-    function previewImage() {
-      const imageUrl = document.getElementById("imageUrl").value.trim();
-      const img = document.getElementById("imagePreview");
-
-      if (imageUrl !== "") {
-        img.src = imageUrl;
-        img.style.display = "block";
-      } else {
-        img.style.display = "none";
-      }
-    }
-
-    window.onload = loadExistingContent;
+    window.addEventListener("DOMContentLoaded", loadSavedData);
   </script>
 </body>
 </html>
