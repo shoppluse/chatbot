@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Code Prompt Generator</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    :root{
+      --bg:#212121;
+      --panel:#2f2f2f;
+      --panel-2:#2a2a2a;
+      --text:#ececec;
+      --muted:#a9a9a9;
+      --border:#3d3d3d;
+      --accent:#ffffff;
+      --user:#343541;
+      --assistant:#2b2b2b;
+      --code:#1e1e1e;
+      --code-border:#444;
+      --btn:#ffffff;
+      --btn-text:#111;
+      --input:#2f2f2f;
+      --danger:#ff4d4d;
+      --green:#10a37f;
+    }
+
+    html,body{
+      width:100%;
+      height:100%;
+      background:var(--bg);
+      color:var(--text);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      overflow:hidden;
+    }
+
+    body{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+
+    .app{
+      width:100%;
+      height:100vh;
+      display:flex;
+      background:var(--bg);
+    }
+
+    /* SIDEBAR */
+    .sidebar{
+      width:260px;
+      background:#171717;
+      border-right:1px solid #262626;
+      display:flex;
+      flex-direction:column;
+      padding:14px;
+      gap:14px;
+    }
+
+    .brand{
+      font-size:18px;
+      font-weight:700;
+      color:#fff;
+      padding:8px 4px 14px;
+    }
+
+    .new-chat-btn{
+      width:100%;
+      border:none;
+      background:#2b2b2b;
+      color:#fff;
+      border:1px solid #3b3b3b;
+      padding:12px 14px;
+      border-radius:12px;
+      font-size:14px;
+      cursor:pointer;
+      text-align:left;
+      transition:0.2s ease;
+    }
+
+    .new-chat-btn:hover{
+      background:#333;
+    }
+
+    .sidebar-note{
+      margin-top:auto;
+      font-size:12px;
+      line-height:1.5;
+      color:#8f8f8f;
+      border-top:1px solid #2a2a2a;
+      padding-top:14px;
+    }
+
+    /* MAIN */
+    .main{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      min-width:0;
+      height:100vh;
+    }
+
+    .topbar{
+      height:60px;
+      border-bottom:1px solid #2e2e2e;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 18px;
+      flex-shrink:0;
+      background:#212121;
+    }
+
+    .top-title{
+      font-size:16px;
+      font-weight:600;
+      color:#fff;
+    }
+
+    .api-btn{
+      border:none;
+      background:#2f2f2f;
+      color:#fff;
+      border:1px solid #3d3d3d;
+      padding:10px 14px;
+      border-radius:10px;
+      cursor:pointer;
+      font-size:13px;
+    }
+
+    .api-btn:hover{
+      background:#393939;
+    }
+
+    /* CHAT AREA */
+    .chat-wrap{
+      flex:1;
+      min-height:0;
+      overflow-y:auto;
+      padding:24px 0 40px;
+      scroll-behavior:smooth;
+    }
+
+    .chat-inner{
+      width:min(900px, calc(100% - 32px));
+      margin:0 auto;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .welcome{
+      margin-top:40px;
+      text-align:center;
+      color:#fff;
+    }
+
+    .welcome h1{
+      font-size:34px;
+      font-weight:700;
+      margin-bottom:10px;
+    }
+
+    .welcome p{
+      font-size:15px;
+      color:#b7b7b7;
+    }
+
+    .message{
+      width:100%;
+      border-radius:18px;
+      border:1px solid var(--border);
+      overflow:hidden;
+      animation:fadeIn 0.25s ease;
+    }
+
+    .message.user{
+      background:var(--user);
+    }
+
+    .message.assistant{
+      background:var(--assistant);
+    }
+
+    .message-head{
+      padding:12px 16px;
+      border-bottom:1px solid rgba(255,255,255,0.06);
+      font-size:13px;
+      font-weight:600;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .message-body{
+      padding:16px;
+      font-size:14px;
+      line-height:1.7;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+
+    .message-body p{
+      margin-bottom:10px;
+    }
+
+    .code-block{
+      background:var(--code);
+      border:1px solid var(--code-border);
+      border-radius:14px;
+      overflow:hidden;
+      margin-top:10px;
+    }
+
+    .code-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:10px 14px;
+      border-bottom:1px solid #333;
+      font-size:12px;
+      color:#bdbdbd;
+      background:#252525;
+    }
+
+    .copy-btn{
+      border:none;
+      background:#343434;
+      color:#fff;
+      padding:6px 10px;
+      border-radius:8px;
+      font-size:12px;
+      cursor:pointer;
+    }
+
+    .copy-btn:hover{
+      background:#404040;
+    }
+
+    pre{
+      margin:0;
+      padding:16px;
+      overflow:auto;
+      font-size:13px;
+      line-height:1.6;
+      color:#f5f5f5;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .typing{
+      display:inline-flex;
+      gap:6px;
+      align-items:center;
+      padding:4px 0;
+    }
+
+    .typing span{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:#bcbcbc;
+      display:block;
+      animation:bounce 1s infinite ease-in-out;
+    }
+
+    .typing span:nth-child(2){ animation-delay:0.15s; }
+    .typing span:nth-child(3){ animation-delay:0.3s; }
+
+    /* INPUT AREA */
+    .input-area{
+      flex-shrink:0;
+      padding:16px;
+      border-top:1px solid #2e2e2e;
+      background:#212121;
+    }
+
+    .input-inner{
+      width:min(900px, calc(100% - 0px));
+      margin:0 auto;
+    }
+
+    .input-box{
+      background:var(--input);
+      border:1px solid #3a3a3a;
+      border-radius:22px;
+      padding:12px 12px 12px 16px;
+      display:flex;
+      align-items:flex-end;
+      gap:10px;
+    }
+
+    .prompt{
+      flex:1;
+      min-height:24px;
+      max-height:180px;
+      resize:none;
+      border:none;
+      outline:none;
+      background:transparent;
+      color:#fff;
+      font-size:15px;
+      line-height:1.6;
+      font-family:inherit;
+      overflow-y:auto;
+    }
+
+    .prompt::placeholder{
+      color:#9d9d9d;
+    }
+
+    .send-btn{
+      width:42px;
+      height:42px;
+      border:none;
+      border-radius:50%;
+      background:#fff;
+      color:#111;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-shrink:0;
+      transition:0.2s ease;
+    }
+
+    .send-btn:hover{
+      transform:scale(1.03);
+    }
+
+    .send-btn:disabled{
+      opacity:0.5;
+      cursor:not-allowed;
+      transform:none;
+    }
+
+    .send-btn svg{
+      width:18px;
+      height:18px;
+    }
+
+    .footer-note{
+      font-size:12px;
+      color:#8f8f8f;
+      text-align:center;
+      margin-top:10px;
+      line-height:1.5;
+    }
+
+    /* MODAL */
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.65);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:999;
+      padding:16px;
+    }
+
+    .modal.show{
+      display:flex;
+    }
+
+    .modal-card{
+      width:min(520px, 100%);
+      background:#1f1f1f;
+      border:1px solid #3a3a3a;
+      border-radius:18px;
+      padding:20px;
+    }
+
+    .modal-card h3{
+      font-size:20px;
+      margin-bottom:10px;
+    }
+
+    .modal-card p{
+      font-size:14px;
+      color:#b9b9b9;
+      line-height:1.6;
+      margin-bottom:14px;
+    }
+
+    .api-input{
+      width:100%;
+      padding:14px;
+      border-radius:12px;
+      border:1px solid #444;
+      background:#2b2b2b;
+      color:#fff;
+      outline:none;
+      font-size:14px;
+      margin-bottom:14px;
+    }
+
+    .modal-actions{
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+    }
+
+    .btn{
+      border:none;
+      padding:10px 16px;
+      border-radius:10px;
+      cursor:pointer;
+      font-size:14px;
+    }
+
+    .btn-secondary{
+      background:#333;
+      color:#fff;
+    }
+
+    .btn-primary{
+      background:#fff;
+      color:#111;
+    }
+
+    .hidden{
+      display:none !important;
+    }
+
+    @keyframes fadeIn{
+      from{ opacity:0; transform:translateY(8px); }
+      to{ opacity:1; transform:translateY(0); }
+    }
+
+    @keyframes bounce{
+      0%,80%,100%{ transform:scale(0.7); opacity:0.6; }
+      40%{ transform:scale(1); opacity:1; }
+    }
+
+    @media (max-width: 900px){
+      .sidebar{
+        display:none;
+      }
+
+      .welcome h1{
+        font-size:28px;
+      }
+
+      .chat-inner,
+      .input-inner{
+        width:calc(100% - 12px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">Code Prompt AI</div>
+      <button class="new-chat-btn" id="newChatBtn">+ New Chat</button>
+      <div class="sidebar-note">
+        Frontend-only code generator.<br />
+        Best for HTML, CSS, JS, Python, Java, C, C++, Arduino, React, Node and more.
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="top-title">Code Generator</div>
+        <button class="api-btn" id="openApiModal">Set API Key</button>
+      </div>
+
+      <div class="chat-wrap" id="chatWrap">
+        <div class="chat-inner" id="chatInner">
+          <div class="welcome" id="welcomeBlock">
+            <h1>What can I help you code?</h1>
+            <p>Type any prompt like “Build a responsive login page” or “Write Python bubble sort”.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-area">
+        <div class="input-inner">
+          <div class="input-box">
+            <textarea
+              id="promptInput"
+              class="prompt"
+              rows="1"
+              placeholder="Ask for any code... (HTML, Python, Java, C++, React, Arduino, etc.)"
+            ></textarea>
+            <button class="send-btn" id="sendBtn" title="Send">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 5L19 12L12 19" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M5 12H19" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+          <div class="footer-note">
+            Uses your own API key in browser (frontend only). For testing/demo use only.
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- API KEY MODAL -->
+  <div class="modal" id="apiModal">
+    <div class="modal-card">
+      <h3>Set OpenAI API Key</h3>
+      <p>
+        This frontend-only version stores your API key in localStorage on your device.
+        For demo/testing only.
+      </p>
+      <input
+        type="password"
+        id="apiKeyInput"
+        class="api-input"
+        placeholder="Paste your OpenAI API key here"
+      />
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="closeModalBtn">Cancel</button>
+        <button class="btn btn-primary" id="saveApiBtn">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const OPENAI_URL = "https://api.openai.com/v1/responses";
+
+    const chatWrap = document.getElementById("chatWrap");
+    const chatInner = document.getElementById("chatInner");
+    const welcomeBlock = document.getElementById("welcomeBlock");
+    const promptInput = document.getElementById("promptInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const newChatBtn = document.getElementById("newChatBtn");
+
+    const apiModal = document.getElementById("apiModal");
+    const openApiModal = document.getElementById("openApiModal");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const saveApiBtn = document.getElementById("saveApiBtn");
+    const apiKeyInput = document.getElementById("apiKeyInput");
+
+    let isGenerating = false;
+
+    function autoResizeTextarea() {
+      promptInput.style.height = "24px";
+      promptInput.style.height = Math.min(promptInput.scrollHeight, 180) + "px";
+    }
+
+    function scrollToBottom() {
+      requestAnimationFrame(() => {
+        chatWrap.scrollTop = chatWrap.scrollHeight;
+      });
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    function detectLanguage(text) {
+      const lower = text.toLowerCase();
+
+      if (lower.includes("<!doctype html") || lower.includes("<html")) return "html";
+      if (lower.includes("def ") || lower.includes("print(")) return "python";
+      if (lower.includes("public class") || lower.includes("system.out.println")) return "java";
+      if (lower.includes("#include") || lower.includes("void setup()")) return "cpp / arduino";
+      if (lower.includes("function") || lower.includes("const ") || lower.includes("let ")) return "javascript";
+      if (lower.includes("import react") || lower.includes("jsx")) return "react";
+      return "code";
+    }
+
+    function extractCodeBlock(text) {
+      const match = text.match(/```([a-zA-Z0-9+#-]*)\n([\s\S]*?)```/);
+      if (match) {
+        return {
+          language: match[1] || detectLanguage(match[2]),
+          code: match[2].trim()
+        };
+      }
+
+      return {
+        language: detectLanguage(text),
+        code: text.trim()
+      };
+    }
+
+    function createMessage(role, content, isCode = false) {
+      const wrapper = document.createElement("div");
+      wrapper.className = `message ${role}`;
+
+      const head = document.createElement("div");
+      head.className = "message-head";
+      head.textContent = role === "user" ? "You" : "AI Code Assistant";
+
+      const body = document.createElement("div");
+      body.className = "message-body";
+
+      if (isCode) {
+        const extracted = extractCodeBlock(content);
+
+        const codeBlock = document.createElement("div");
+        codeBlock.className = "code-block";
+
+        const codeHead = document.createElement("div");
+        codeHead.className = "code-head";
+
+        const lang = document.createElement("span");
+        lang.textContent = extracted.language;
+
+        const copyBtn = document.createElement("button");
+        copyBtn.className = "copy-btn";
+        copyBtn.textContent = "Copy";
+        copyBtn.onclick = async () => {
+          try {
+            await navigator.clipboard.writeText(extracted.code);
+            copyBtn.textContent = "Copied!";
+            setTimeout(() => copyBtn.textContent = "Copy", 1200);
+          } catch {
+            copyBtn.textContent = "Failed";
+            setTimeout(() => copyBtn.textContent = "Copy", 1200);
+          }
+        };
+
+        codeHead.appendChild(lang);
+        codeHead.appendChild(copyBtn);
+
+        const pre = document.createElement("pre");
+        pre.innerHTML = escapeHtml(extracted.code);
+
+        codeBlock.appendChild(codeHead);
+        codeBlock.appendChild(pre);
+        body.appendChild(codeBlock);
+      } else {
+        body.textContent = content;
+      }
+
+      wrapper.appendChild(head);
+      wrapper.appendChild(body);
+      chatInner.appendChild(wrapper);
+
+      scrollToBottom();
+      return wrapper;
+    }
+
+    function createTypingMessage() {
+      const wrapper = document.createElement("div");
+      wrapper.className = "message assistant";
+
+      const head = document.createElement("div");
+      head.className = "message-head";
+      head.textContent = "AI Code Assistant";
+
+      const body = document.createElement("div");
+      body.className = "message-body";
+
+      const typing = document.createElement("div");
+      typing.className = "typing";
+      typing.innerHTML = "<span></span><span></span><span></span>";
+
+      body.appendChild(typing);
+      wrapper.appendChild(head);
+      wrapper.appendChild(body);
+      chatInner.appendChild(wrapper);
+
+      scrollToBottom();
+      return wrapper;
+    }
+
+    function removeWelcome() {
+      if (welcomeBlock) {
+        welcomeBlock.remove();
+      }
+    }
+
+    function getApiKey() {
+      return localStorage.getItem("openai_api_key") || "";
+    }
+
+    function openModal() {
+      apiKeyInput.value = getApiKey();
+      apiModal.classList.add("show");
+      setTimeout(() => apiKeyInput.focus(), 50);
+    }
+
+    function closeModal() {
+      apiModal.classList.remove("show");
+    }
+
+    async function generateCode(prompt) {
+      const apiKey = getApiKey();
+
+      if (!apiKey) {
+        openModal();
+        throw new Error("Please set your OpenAI API key first.");
+      }
+
+      const systemInstruction = `
+You are an expert code generator.
+The user may ask for code in any programming language.
+Rules:
+- Return ONLY the final code.
+- No explanation.
+- No markdown explanation.
+- Prefer full working code.
+- If possible, return a single complete file.
+- If the user asks for HTML/CSS/JS, you may return one complete HTML file with internal CSS and JS unless they explicitly ask for separate files.
+- If the prompt asks for Python, Java, C, C++, Arduino, React, Node, SQL, etc., return correct code in that language.
+- Wrap the final code in triple backticks with language label.
+`;
+
+      const response = await fetch(OPENAI_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: "gpt-5-mini",
+          input: [
+            {
+              role: "system",
+              content: [
+                {
+                  type: "input_text",
+                  text: systemInstruction
+                }
+              ]
+            },
+            {
+              role: "user",
+              content: [
+                {
+                  type: "input_text",
+                  text: prompt
+                }
+              ]
+            }
+          ]
+        })
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error("API Error: " + errorText);
+      }
+
+      const data = await response.json();
+
+      const outputText =
+        data.output_text ||
+        (data.output && Array.isArray(data.output)
+          ? data.output
+              .flatMap(item => item.content || [])
+              .filter(c => c.type === "output_text")
+              .map(c => c.text)
+              .join("\n")
+          : "");
+
+      if (!outputText.trim()) {
+        throw new Error("No response text received.");
+      }
+
+      return outputText;
+    }
+
+    async function handleSend() {
+      const prompt = promptInput.value.trim();
+      if (!prompt || isGenerating) return;
+
+      isGenerating = true;
+      sendBtn.disabled = true;
+
+      removeWelcome();
+      createMessage("user", prompt, false);
+
+      promptInput.value = "";
+      autoResizeTextarea();
+
+      const typingMessage = createTypingMessage();
+
+      try {
+        const result = await generateCode(prompt);
+        typingMessage.remove();
+        createMessage("assistant", result, true);
+      } catch (error) {
+        typingMessage.remove();
+        createMessage("assistant", "Error: " + error.message, false);
+      } finally {
+        isGenerating = false;
+        sendBtn.disabled = false;
+        promptInput.focus();
+      }
+    }
+
+    function resetChat() {
+      chatInner.innerHTML = `
+        <div class="welcome" id="welcomeBlock">
+          <h1>What can I help you code?</h1>
+          <p>Type any prompt like “Build a responsive login page” or “Write Python bubble sort”.</p>
+        </div>
+      `;
+      scrollToBottom();
+    }
+
+    promptInput.addEventListener("input", autoResizeTextarea);
+
+    promptInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        handleSend();
+      }
+    });
+
+    sendBtn.addEventListener("click", handleSend);
+    newChatBtn.addEventListener("click", resetChat);
+
+    openApiModal.addEventListener("click", openModal);
+    closeModalBtn.addEventListener("click", closeModal);
+
+    saveApiBtn.addEventListener("click", () => {
+      const key = apiKeyInput.value.trim();
+      if (!key) {
+        alert("Please enter API key");
+        return;
+      }
+      localStorage.setItem("openai_api_key", key);
+      closeModal();
+    });
+
+    apiModal.addEventListener("click", (e) => {
+      if (e.target === apiModal) closeModal();
+    });
+
+    autoResizeTextarea();
+  </script>
+</body>
+</html>
