@@ -72,14 +72,43 @@
       font-size: 13px;
       color: #222;
       border-bottom: 1px solid #e0e0e0;
+      position: relative;
+      z-index: 100;
     }
 
     .menu-item {
       cursor: pointer;
       padding: 2px 0;
+      user-select: none;
     }
 
     .menu-item:hover {
+      color: #006d70;
+    }
+
+    /* DROPDOWN */
+    .dropdown {
+      position: absolute;
+      top: 24px;
+      left: 6px;
+      width: 240px;
+      background: #ffffff;
+      border: 1px solid #cfd6d5;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+      display: none;
+      flex-direction: column;
+      z-index: 999;
+    }
+
+    .dropdown-item {
+      padding: 10px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .dropdown-item:hover {
+      background: #e8f6f6;
       color: #006d70;
     }
 
@@ -111,6 +140,12 @@
       font-size: 17px;
       font-weight: bold;
       cursor: pointer;
+      transition: 0.2s;
+      user-select: none;
+    }
+
+    .round-btn:hover {
+      background: #9ad9d7;
     }
 
     .board-select {
@@ -125,6 +160,7 @@
       padding: 0 12px;
       font-size: 14px;
       color: #666;
+      cursor: pointer;
     }
 
     .toolbar-right {
@@ -133,12 +169,17 @@
       gap: 18px;
       color: #d9f7f7;
       font-size: 20px;
+      user-select: none;
+    }
+
+    .toolbar-right span {
+      cursor: pointer;
     }
 
     /* MAIN */
     .main {
       display: flex;
-      height: calc(100vh - 100px);
+      height: calc(100vh - 128px);
     }
 
     /* SIDEBAR */
@@ -160,6 +201,7 @@
       justify-content: center;
       cursor: pointer;
       color: #9ca8a8;
+      user-select: none;
     }
 
     .side-btn svg {
@@ -207,14 +249,6 @@
       overflow: hidden;
     }
 
-    .editor-frame {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
-    }
-
-    /* DEFAULT EDITOR SCREEN */
     .default-editor {
       display: flex;
       width: 100%;
@@ -231,6 +265,7 @@
       font-size: 14px;
       line-height: 1.5;
       user-select: none;
+      white-space: pre;
     }
 
     .code-panel {
@@ -244,6 +279,7 @@
       color: #333;
       white-space: pre;
       border-left: 1px solid #efefef;
+      overflow: auto;
     }
 
     .cursor-line {
@@ -257,6 +293,7 @@
 
     .code-content {
       padding-left: 0;
+      min-height: 100%;
     }
 
     .kw {
@@ -276,18 +313,41 @@
       height: 28px;
       background: #006d70;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       align-items: center;
-      gap: 18px;
       padding: 0 12px;
       color: #ffffff;
       font-size: 12px;
+    }
+
+    .status-left,
+    .status-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
     }
 
     .status-bar span {
       display: flex;
       align-items: center;
       gap: 5px;
+    }
+
+    /* POPUP */
+    .popup {
+      position: fixed;
+      top: 90px;
+      right: 20px;
+      background: #ffffff;
+      border: 1px solid #cfd6d5;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+      padding: 12px 16px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #333;
+      display: none;
+      z-index: 2000;
+      min-width: 220px;
     }
   </style>
 </head>
@@ -300,38 +360,41 @@
       <div>sketch_apr28a | Arduino IDE 2.3.7</div>
     </div>
     <div class="window-controls">
-      <span>—</span>
-      <span>□</span>
-      <span>✕</span>
+      <span onclick="showPopup('Minimize clicked')">—</span>
+      <span onclick="showPopup('Maximize clicked')">□</span>
+      <span onclick="showPopup('Close clicked')">✕</span>
     </div>
   </div>
 
   <!-- MENU -->
   <div class="menu-bar">
-    <div class="menu-item" onclick="openFilePage()">File</div>
-    <div class="menu-item">Edit</div>
-    <div class="menu-item">Sketch</div>
-    <div class="menu-item">Tools</div>
-    <div class="menu-item">Help</div>
+    <div class="menu-item" onclick="toggleFileMenu()">File</div>
+    <div class="menu-item" onclick="showPopup('Edit Menu: Undo, Redo, Copy, Paste')">Edit</div>
+    <div class="menu-item" onclick="showPopup('Sketch Menu: Verify, Upload, Export')">Sketch</div>
+    <div class="menu-item" onclick="showPopup('Tools Menu: Board, Port, Serial Monitor')">Tools</div>
+    <div class="menu-item" onclick="showPopup('Help Menu: About Arduino IDE 2.3.7')">Help</div>
+
+    <!-- FILE DROPDOWN -->
+    <div class="dropdown" id="fileDropdown"></div>
   </div>
 
   <!-- TOOLBAR -->
   <div class="toolbar">
     <div class="toolbar-left">
-      <div class="round-btn">✓</div>
-      <div class="round-btn">➜</div>
-      <div class="round-btn">⟲</div>
+      <div class="round-btn" onclick="showPopup('Verify successful')">✓</div>
+      <div class="round-btn" onclick="showPopup('Upload started...')">➜</div>
+      <div class="round-btn" onclick="showPopup('New sketch created')">⟲</div>
 
-      <div class="board-select">
+      <div class="board-select" onclick="showPopup('Board selection panel opened')">
         <span>Select Board</span>
         <span>▼</span>
       </div>
     </div>
 
     <div class="toolbar-right">
-      <span>∿</span>
-      <span>⚙</span>
-      <span>⋯</span>
+      <span onclick="showPopup('Serial Plotter opened')">∿</span>
+      <span onclick="showPopup('Settings opened')">⚙</span>
+      <span onclick="showPopup('More options opened')">⋯</span>
     </div>
   </div>
 
@@ -339,34 +402,33 @@
   <div class="main">
     <!-- SIDEBAR -->
     <div class="sidebar">
-      <!-- FOLDER ICON -->
-      <div class="side-btn active" onclick="openFilePage()" title="Open File">
+      <div class="side-btn active" onclick="toggleFileMenu()" title="Open File">
         <svg viewBox="0 0 24 24">
           <path d="M3 6h6l2 2h10v10H3z"></path>
         </svg>
       </div>
 
-      <div class="side-btn">
+      <div class="side-btn" onclick="showPopup('Output panel opened')">
         <svg viewBox="0 0 24 24">
           <path d="M6 5h12v14H6z"></path>
           <path d="M9 9h6M9 13h6"></path>
         </svg>
       </div>
 
-      <div class="side-btn">
+      <div class="side-btn" onclick="showPopup('Library manager opened')">
         <svg viewBox="0 0 24 24">
           <path d="M5 4h3v16H5zM10.5 8h3v12h-3zM16 2h3v18h-3z"></path>
         </svg>
       </div>
 
-      <div class="side-btn">
+      <div class="side-btn" onclick="showPopup('Debug panel opened')">
         <svg viewBox="0 0 24 24">
           <circle cx="12" cy="12" r="8"></circle>
           <path d="M8 16l8-8"></path>
         </svg>
       </div>
 
-      <div class="side-btn">
+      <div class="side-btn" onclick="showPopup('Search panel opened')">
         <svg viewBox="0 0 24 24">
           <circle cx="10" cy="10" r="6"></circle>
           <path d="M15 15l5 5"></path>
@@ -374,7 +436,7 @@
       </div>
 
       <div class="bottom-user">
-        <div class="side-btn">
+        <div class="side-btn" onclick="showPopup('User profile opened')">
           <svg viewBox="0 0 24 24">
             <circle cx="12" cy="8" r="4"></circle>
             <path d="M4 20c2-4 14-4 16 0"></path>
@@ -388,9 +450,8 @@
       <div class="tab-bar" id="tabTitle">sketch_apr28a.ino</div>
 
       <div class="editor-area" id="editorArea">
-        <!-- default view -->
-        <div class="default-editor" id="defaultEditor">
-          <div class="line-numbers">1
+        <div class="default-editor">
+          <div class="line-numbers" id="lineNumbers">1
 2
 3
 4
@@ -403,7 +464,7 @@
 
           <div class="code-panel">
             <div class="cursor-line"></div>
-            <div class="code-content"><span class="kw">void</span> setup() {
+            <div class="code-content" id="codeContent"><span class="kw">void</span> setup() {
   <span class="comment">// put your setup code here, to run once:</span>
 
 }
@@ -420,22 +481,162 @@
 
   <!-- STATUS -->
   <div class="status-bar">
-    <span>Ln 1, Col 1</span>
-    <span>✕ No board selected</span>
-    <span>🔔</span>
+    <div class="status-left">
+      <span id="statusMessage">Ready</span>
+    </div>
+    <div class="status-right">
+      <span id="cursorStatus">Ln 1, Col 1</span>
+      <span>✕ No board selected</span>
+      <span>🔔</span>
+    </div>
   </div>
 
+  <!-- POPUP -->
+  <div class="popup" id="popup"></div>
+
   <script>
-    function openFilePage() {
-      const editorArea = document.getElementById("editorArea");
-      const tabTitle = document.getElementById("tabTitle");
+    // =========================
+    // ADD YOUR PROGRAM FILES HERE
+    // =========================
+    const files = {
+      "blink.ino": `void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+}
 
-      tabTitle.textContent = "file.html";
+void loop() {
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(1000);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(1000);
+}`,
 
-      editorArea.innerHTML = `
-        <iframe src="file.html" class="editor-frame"></iframe>
-      `;
+      "led_control.ino": `int ledPin = 13;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(ledPin, HIGH);
+  delay(500);
+  digitalWrite(ledPin, LOW);
+  delay(500);
+}`,
+
+      "ultrasonic.ino": `const int trigPin = 9;
+const int echoPin = 10;
+long duration;
+int distance;
+
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+  distance = duration * 0.034 / 2;
+
+  Serial.println(distance);
+  delay(500);
+}`,
+
+      "temperature_sensor.ino": `int sensorPin = A0;
+float voltage, temperature;
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  int reading = analogRead(sensorPin);
+  voltage = reading * 5.0 / 1024.0;
+  temperature = voltage * 100.0;
+
+  Serial.print("Temperature: ");
+  Serial.println(temperature);
+  delay(1000);
+}`
+    };
+
+    const fileDropdown = document.getElementById("fileDropdown");
+    const tabTitle = document.getElementById("tabTitle");
+    const codeContent = document.getElementById("codeContent");
+    const lineNumbers = document.getElementById("lineNumbers");
+    const popup = document.getElementById("popup");
+    const statusMessage = document.getElementById("statusMessage");
+    const cursorStatus = document.getElementById("cursorStatus");
+
+    // Build File Dropdown
+    function buildFileMenu() {
+      fileDropdown.innerHTML = "";
+      Object.keys(files).forEach(fileName => {
+        const item = document.createElement("div");
+        item.className = "dropdown-item";
+        item.textContent = fileName;
+        item.onclick = () => openProgram(fileName);
+        fileDropdown.appendChild(item);
+      });
     }
+
+    // Toggle File Menu
+    function toggleFileMenu() {
+      if (fileDropdown.style.display === "flex") {
+        fileDropdown.style.display = "none";
+      } else {
+        buildFileMenu();
+        fileDropdown.style.display = "flex";
+      }
+    }
+
+    // Open Program in Editor
+    function openProgram(fileName) {
+      const code = files[fileName];
+      tabTitle.textContent = fileName;
+      codeContent.textContent = code;
+
+      const lines = code.split("\n").length;
+      let lineText = "";
+      for (let i = 1; i <= lines; i++) {
+        lineText += i + (i < lines ? "\n" : "");
+      }
+      lineNumbers.textContent = lineText;
+
+      cursorStatus.textContent = "Ln 1, Col 1";
+      statusMessage.textContent = `Opened ${fileName}`;
+      fileDropdown.style.display = "none";
+      showPopup(`${fileName} opened successfully`);
+    }
+
+    // Popup
+    function showPopup(message) {
+      popup.textContent = message;
+      popup.style.display = "block";
+      statusMessage.textContent = message;
+
+      clearTimeout(window.popupTimer);
+      window.popupTimer = setTimeout(() => {
+        popup.style.display = "none";
+      }, 1800);
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener("click", function(event) {
+      const isMenu = event.target.closest(".menu-item");
+      const isSidebarFolder = event.target.closest(".side-btn");
+      const isDropdown = event.target.closest(".dropdown");
+
+      if (!isMenu && !isSidebarFolder && !isDropdown) {
+        fileDropdown.style.display = "none";
+      }
+    });
   </script>
 
 </body>
