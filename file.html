@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Files | Arduino IDE</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #f3f3f3;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .header {
+      background: #006d70;
+      color: white;
+      padding: 18px 24px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .file-item {
+      padding: 18px 24px;
+      border-bottom: 1px solid #eee;
+      font-size: 18px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .file-item:hover {
+      background: #e8f6f6;
+      color: #006d70;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 20px;
+      text-decoration: none;
+      background: #006d70;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="home.html" class="back-btn">← Back to Home</a>
+
+  <div class="container">
+    <div class="header">My Arduino Files</div>
+
+    <div class="file-item" onclick="location.href='blink.html'">blink.ino</div>
+    <div class="file-item" onclick="location.href='ultrasonic.html'">ultrasonic.ino</div>
+    <div class="file-item" onclick="location.href='temperature.html'">temperature.ino</div>
+    <div class="file-item" onclick="location.href='servo.html'">servo.ino</div>
+  </div>
+
+</body>
+</html>
