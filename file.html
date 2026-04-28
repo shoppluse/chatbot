@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Files | Arduino IDE</title>
+  <title>sketch_apr28a | Arduino IDE 2.3.7</title>
   <style>
     * {
       margin: 0;
@@ -13,65 +13,430 @@
     }
 
     body {
-      background: #f3f3f3;
-      padding: 40px;
-    }
-
-    .container {
-      max-width: 700px;
-      margin: auto;
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      background: #ffffff;
     }
 
-    .header {
-      background: #006d70;
+    /* WINDOW BAR */
+    .window-bar {
+      height: 30px;
+      background: #ece8df;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px;
+      border-bottom: 1px solid #d4d1ca;
+      font-size: 13px;
+      color: #222;
+    }
+
+    .window-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .arduino-icon {
+      width: 16px;
+      height: 16px;
+      background: #0a8c8d;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .arduino-icon::before {
+      content: "∞";
       color: white;
-      padding: 18px 24px;
-      font-size: 24px;
-      font-weight: bold;
+      font-size: 12px;
+      position: absolute;
+      top: -1px;
+      left: 2px;
     }
 
-    .file-item {
-      padding: 18px 24px;
-      border-bottom: 1px solid #eee;
-      font-size: 18px;
+    .window-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 14px;
+      user-select: none;
+    }
+
+    /* MENU BAR */
+    .menu-bar {
+      height: 24px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 0 6px;
+      font-size: 13px;
+      color: #222;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .menu-item {
       cursor: pointer;
-      transition: 0.2s;
+      padding: 2px 0;
     }
 
-    .file-item:hover {
-      background: #e8f6f6;
+    .menu-item:hover {
       color: #006d70;
     }
 
-    .back-btn {
-      display: inline-block;
-      margin-bottom: 20px;
-      text-decoration: none;
+    /* TOOLBAR */
+    .toolbar {
+      height: 46px;
       background: #006d70;
-      color: white;
-      padding: 10px 18px;
-      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .round-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #7fc9c7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0b5d5f;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .board-select {
+      width: 255px;
+      height: 32px;
+      background: #ffffff;
+      margin-left: 8px;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
       font-size: 14px;
+      color: #666;
+    }
+
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: #d9f7f7;
+      font-size: 20px;
+    }
+
+    /* MAIN */
+    .main {
+      display: flex;
+      height: calc(100vh - 100px);
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 52px;
+      background: #dde5e4;
+      border-right: 1px solid #cfd6d5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .side-btn {
+      width: 100%;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #9ca8a8;
+    }
+
+    .side-btn svg {
+      width: 28px;
+      height: 28px;
+      stroke: #a1adad;
+      fill: none;
+      stroke-width: 1.8;
+    }
+
+    .side-btn.active svg,
+    .side-btn:hover svg {
+      stroke: #8b9999;
+    }
+
+    .bottom-user {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+    }
+
+    /* CONTENT */
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+    }
+
+    .tab-bar {
+      height: 28px;
+      display: flex;
+      align-items: center;
+      padding-left: 8px;
+      border-bottom: 1px solid #e6e6e6;
+      font-size: 13px;
+      color: #444;
+      background: #ffffff;
+    }
+
+    .editor-area {
+      flex: 1;
+      background: #ffffff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .editor-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* DEFAULT EDITOR SCREEN */
+    .default-editor {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    .line-numbers {
+      width: 72px;
+      background: #ffffff;
+      color: #2f78b5;
+      text-align: right;
+      padding-right: 18px;
+      padding-top: 8px;
+      font-size: 14px;
+      line-height: 1.5;
+      user-select: none;
+    }
+
+    .code-panel {
+      flex: 1;
+      background: #f9f9f9;
+      padding-top: 8px;
+      position: relative;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #333;
+      white-space: pre;
+      border-left: 1px solid #efefef;
+    }
+
+    .cursor-line {
+      position: absolute;
+      top: 8px;
+      left: 0;
+      width: 2px;
+      height: 20px;
+      background: #16a0a3;
+    }
+
+    .code-content {
+      padding-left: 0;
+    }
+
+    .kw {
+      color: #0b9db0;
+    }
+
+    .comment {
+      color: #95a2a6;
+    }
+
+    .orange {
+      color: #d68033;
+    }
+
+    /* STATUS BAR */
+    .status-bar {
+      height: 28px;
+      background: #006d70;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 18px;
+      padding: 0 12px;
+      color: #ffffff;
+      font-size: 12px;
+    }
+
+    .status-bar span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
   </style>
 </head>
 <body>
 
-  <a href="home.html" class="back-btn">← Back to Home</a>
-
-  <div class="container">
-    <div class="header">My Arduino Files</div>
-
-    <div class="file-item" onclick="location.href='blink.html'">blink.ino</div>
-    <div class="file-item" onclick="location.href='ultrasonic.html'">ultrasonic.ino</div>
-    <div class="file-item" onclick="location.href='temperature.html'">temperature.ino</div>
-    <div class="file-item" onclick="location.href='servo.html'">servo.ino</div>
+  <!-- WINDOW BAR -->
+  <div class="window-bar">
+    <div class="window-left">
+      <div class="arduino-icon"></div>
+      <div>sketch_apr28a | Arduino IDE 2.3.7</div>
+    </div>
+    <div class="window-controls">
+      <span>—</span>
+      <span>□</span>
+      <span>✕</span>
+    </div>
   </div>
+
+  <!-- MENU -->
+  <div class="menu-bar">
+    <div class="menu-item" onclick="openFilePage()">File</div>
+    <div class="menu-item">Edit</div>
+    <div class="menu-item">Sketch</div>
+    <div class="menu-item">Tools</div>
+    <div class="menu-item">Help</div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <div class="round-btn">✓</div>
+      <div class="round-btn">➜</div>
+      <div class="round-btn">⟲</div>
+
+      <div class="board-select">
+        <span>Select Board</span>
+        <span>▼</span>
+      </div>
+    </div>
+
+    <div class="toolbar-right">
+      <span>∿</span>
+      <span>⚙</span>
+      <span>⋯</span>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <!-- FOLDER ICON -->
+      <div class="side-btn active" onclick="openFilePage()" title="Open File">
+        <svg viewBox="0 0 24 24">
+          <path d="M3 6h6l2 2h10v10H3z"></path>
+        </svg>
+      </div>
+
+      <div class="side-btn">
+        <svg viewBox="0 0 24 24">
+          <path d="M6 5h12v14H6z"></path>
+          <path d="M9 9h6M9 13h6"></path>
+        </svg>
+      </div>
+
+      <div class="side-btn">
+        <svg viewBox="0 0 24 24">
+          <path d="M5 4h3v16H5zM10.5 8h3v12h-3zM16 2h3v18h-3z"></path>
+        </svg>
+      </div>
+
+      <div class="side-btn">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="8"></circle>
+          <path d="M8 16l8-8"></path>
+        </svg>
+      </div>
+
+      <div class="side-btn">
+        <svg viewBox="0 0 24 24">
+          <circle cx="10" cy="10" r="6"></circle>
+          <path d="M15 15l5 5"></path>
+        </svg>
+      </div>
+
+      <div class="bottom-user">
+        <div class="side-btn">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 20c2-4 14-4 16 0"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+      <div class="tab-bar" id="tabTitle">sketch_apr28a.ino</div>
+
+      <div class="editor-area" id="editorArea">
+        <!-- default view -->
+        <div class="default-editor" id="defaultEditor">
+          <div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10</div>
+
+          <div class="code-panel">
+            <div class="cursor-line"></div>
+            <div class="code-content"><span class="kw">void</span> setup() {
+  <span class="comment">// put your setup code here, to run once:</span>
+
+}
+
+<span class="kw">void</span> <span class="orange">loop</span>() {
+  <span class="comment">// put your main code here, to run repeatedly:</span>
+
+}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATUS -->
+  <div class="status-bar">
+    <span>Ln 1, Col 1</span>
+    <span>✕ No board selected</span>
+    <span>🔔</span>
+  </div>
+
+  <script>
+    function openFilePage() {
+      const editorArea = document.getElementById("editorArea");
+      const tabTitle = document.getElementById("tabTitle");
+
+      tabTitle.textContent = "file.html";
+
+      editorArea.innerHTML = `
+        <iframe src="file.html" class="editor-frame"></iframe>
+      `;
+    }
+  </script>
 
 </body>
 </html>
