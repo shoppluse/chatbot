@@ -3,184 +3,231 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sādhana Live</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Grotesk:wght@300;400;500;600&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+<title>Sādhana Live Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --ink:#1A1008;--saffron:#E85D04;--saffron2:#F7931E;--gold:#C9820A;
-  --lotus:#FF6B9D;--sky:#3B82F6;--sage:#16A34A;--cream:#FFFBF4;
-  --warm:#FDF3E3;--card:#FFFFFF;--muted:#7C5C3A;--border:#EDD9B8;--light:#F5ECD8;
+  --bg:#EEF4FB;
+  --surface:#FFFFFF;
+  --surface2:#F4F9FF;
+  --sidebar:#1B3A6B;
+  --sidebar2:#243F72;
+  --blue:#2563EB;
+  --blue2:#3B82F6;
+  --accent:#0EA5E9;
+  --accent2:#38BDF8;
+  --teal:#0D9488;
+  --orange:#F97316;
+  --red:#EF4444;
+  --green:#22C55E;
+  --gold:#F59E0B;
+  --ink:#0F172A;
+  --ink2:#334155;
+  --muted:#64748B;
+  --muted2:#94A3B8;
+  --border:#DBEAFE;
+  --border2:#BFDBFE;
+  --shadow:0 1px 3px rgba(37,99,235,.08), 0 4px 16px rgba(37,99,235,.06);
+  --shadow2:0 8px 32px rgba(37,99,235,.12);
 }
-html{scroll-behavior:smooth}
-body{background:var(--cream);color:var(--ink);font-family:'Space Grotesk',sans-serif;overflow-x:hidden;}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;overflow-x:hidden;}
 
-#loader{position:fixed;inset:0;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .8s ease;}
-.loader-om{font-family:'Noto Serif Devanagari',serif;font-size:88px;color:var(--saffron);animation:loaderPulse 1.8s ease-in-out infinite;line-height:1;}
-@keyframes loaderPulse{0%,100%{opacity:.3;transform:scale(.92)}50%{opacity:1;transform:scale(1)}}
-.loader-txt{color:#8A6040;font-size:13px;letter-spacing:.25em;margin-top:20px;text-transform:uppercase;}
-#loader.out{opacity:0;pointer-events:none}
+/* SIDEBAR */
+.sidebar{width:64px;min-height:100vh;background:var(--sidebar);display:flex;flex-direction:column;align-items:center;padding:20px 0;gap:8px;position:fixed;left:0;top:0;bottom:0;z-index:100;transition:width .3s;}
+.sidebar-logo{width:36px;height:36px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif Devanagari',serif;font-size:18px;color:#fff;margin-bottom:20px;flex-shrink:0;}
+.nav-item{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;color:rgba(255,255,255,.45);font-size:18px;flex-shrink:0;}
+.nav-item:hover,.nav-item.active{background:rgba(255,255,255,.12);color:#fff;}
+.nav-item.active{background:var(--blue);color:#fff;}
+.nav-sep{width:32px;height:1px;background:rgba(255,255,255,.1);margin:8px 0;}
 
-.hero{position:relative;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;}
-.hero-left{background:var(--ink);display:flex;flex-direction:column;justify-content:center;padding:80px 60px;position:relative;overflow:hidden;}
-.hero-left::before{content:'ॐ';font-family:'Noto Serif Devanagari',serif;position:absolute;right:-40px;top:50%;transform:translateY(-50%);font-size:500px;color:rgba(232,93,4,.06);line-height:1;pointer-events:none;}
-.hero-eyebrow{font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--saffron);font-weight:500;margin-bottom:24px;display:flex;align-items:center;gap:12px;}
-.hero-eyebrow::before{content:'';width:32px;height:1px;background:var(--saffron);}
-.hero-title{font-family:'Playfair Display',serif;font-size:clamp(48px,6vw,80px);color:#fff;line-height:.95;font-weight:900;margin-bottom:28px;}
-.hero-title em{color:var(--saffron);font-style:italic;}
-.hero-desc{font-size:15px;color:#8A6040;line-height:1.7;max-width:360px;margin-bottom:40px;}
-.live-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(232,93,4,.12);border:1px solid rgba(232,93,4,.25);border-radius:100px;padding:8px 18px;color:var(--saffron);font-size:12px;font-weight:500;letter-spacing:.08em;}
-.live-dot{width:7px;height:7px;border-radius:50%;background:var(--saffron);animation:blink 1.6s ease-in-out infinite;}
+/* MAIN */
+.main{margin-left:64px;flex:1;min-height:100vh;display:flex;flex-direction:column;}
+
+/* TOP BAR */
+.topbar{height:60px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:50;}
+.topbar-welcome{font-size:12px;color:var(--muted);margin-right:4px;}
+.topbar-name{font-size:16px;font-weight:700;color:var(--ink);}
+.search-box{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 14px;width:220px;}
+.search-box input{border:none;background:transparent;font-size:13px;color:var(--ink);outline:none;width:100%;}
+.search-box input::placeholder{color:var(--muted2);}
+.topbar-icon{width:34px;height:34px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--muted);}
+.avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;}
+.live-badge{display:flex;align-items:center;gap:6px;background:#EFF6FF;border:1px solid var(--border2);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;color:var(--blue);letter-spacing:.04em;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.4s ease-in-out infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
-.hero-right{background:var(--warm);display:grid;grid-template-rows:1fr 1fr;border-left:1px solid var(--border);}
-.hero-stat-big{padding:52px 48px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;}
-.hero-stat-big:last-child{border-bottom:none;}
-.hero-stat-big::after{content:attr(data-icon);position:absolute;right:32px;bottom:20px;font-size:80px;opacity:.08;line-height:1;}
-.hsb-label{font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
-.hsb-num{font-family:'Playfair Display',serif;font-size:clamp(52px,7vw,96px);font-weight:900;line-height:1;background:linear-gradient(135deg,var(--saffron),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.hsb-sub{font-size:13px;color:var(--muted);margin-top:8px;}
+/* CONTENT */
+.content{padding:24px;display:grid;grid-template-columns:1fr 1fr 1fr 300px;grid-template-rows:auto auto auto auto;gap:16px;flex:1;}
 
-.marquee-strip{background:var(--saffron);padding:12px 0;overflow:hidden;display:flex;}
-.marquee-inner{display:flex;gap:48px;animation:marquee 22s linear infinite;white-space:nowrap;}
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.marquee-item{font-size:12px;letter-spacing:.25em;text-transform:uppercase;color:#fff;font-weight:500;display:flex;align-items:center;gap:16px;}
-.marquee-item::after{content:'✦';opacity:.5;}
+/* STAT CARDS */
+.stat-card{background:var(--surface);border-radius:14px;padding:20px;border:1px solid var(--border);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden;}
+.stat-card::after{content:attr(data-icon);position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:36px;opacity:.12;}
+.sc-row{display:flex;align-items:center;justify-content:space-between;}
+.sc-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);}
+.sc-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.sc-icon.blue{background:#DBEAFE;color:var(--blue);}
+.sc-icon.teal{background:#CCFBF1;color:var(--teal);}
+.sc-icon.orange{background:#FEF3C7;color:var(--gold);}
+.sc-icon.green{background:#DCFCE7;color:var(--green);}
+.sc-num{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:var(--ink);line-height:1;}
+.sc-change{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;}
+.sc-change.up{background:#DCFCE7;color:#16A34A;}
+.sc-change.dn{background:#FEE2E2;color:#DC2626;}
+.sc-sub{font-size:11px;color:var(--muted);}
 
-.wrap{max-width:1200px;margin:0 auto;padding:0 32px;}
-.sec-label{font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:var(--saffron);font-weight:600;display:flex;align-items:center;gap:12px;margin-bottom:20px;}
-.sec-label::after{content:'';flex:1;height:1px;background:var(--border);}
-
-.hm-section{display:grid;grid-template-columns:1fr 320px;gap:0;border:1px solid var(--border);border-radius:24px;overflow:hidden;margin:56px 0;background:var(--card);}
-.hm-main{padding:40px 40px 32px;}
-.hm-sidebar{background:var(--ink);padding:40px 32px;display:flex;flex-direction:column;justify-content:space-between;}
-.hm-sidebar-title{font-family:'Playfair Display',serif;font-size:28px;color:#fff;font-weight:700;line-height:1.2;margin-bottom:8px;}
-.hm-sidebar-sub{font-size:13px;color:#8A6040;line-height:1.6;}
-.hm-sidebar-stats{margin-top:auto;padding-top:32px;}
-.hms-item{padding:16px 0;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:center;}
-.hms-item:last-child{border-bottom:1px solid rgba(255,255,255,.08);}
-.hms-lbl{font-size:11px;color:#8A6040;letter-spacing:.1em;text-transform:uppercase;}
-.hms-val{font-family:'Playfair Display',serif;font-size:22px;color:var(--saffron);font-weight:700;}
-
-.heatmap{display:flex;flex-wrap:wrap;gap:3px;}
-.hm-cell{width:22px;height:22px;border-radius:4px;cursor:pointer;flex-shrink:0;transition:transform .15s;position:relative;}
-.hm-cell:hover{transform:scale(1.5);z-index:10;}
-.hm-cell.l0{background:#F0E9D8;}
-.hm-cell.l1{background:rgba(201,130,10,.22);}
-.hm-cell.l2{background:rgba(201,130,10,.5);}
-.hm-cell.l3{background:rgba(232,93,4,.72);}
-.hm-cell.l4{background:var(--saffron);}
-.tip{display:none;position:absolute;bottom:calc(100%+8px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:8px;padding:6px 10px;font-size:11px;white-space:nowrap;z-index:100;pointer-events:none;}
-.tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--ink);}
+/* HEATMAP CARD */
+.heatmap-card{grid-column:1/3;background:var(--surface);border-radius:14px;padding:24px;border:1px solid var(--border);box-shadow:var(--shadow);}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.card-title{font-size:14px;font-weight:700;color:var(--ink);}
+.card-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.month-tabs{display:flex;gap:4px;}
+.tab{font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;cursor:pointer;color:var(--muted);border:1px solid transparent;}
+.tab.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+.heatmap-grid{display:flex;flex-wrap:wrap;gap:3px;}
+.hm-cell{width:18px;height:18px;border-radius:3px;cursor:pointer;transition:transform .15s;position:relative;}
+.hm-cell:hover{transform:scale(1.6);z-index:10;}
+.hm-cell.l0{background:#EFF6FF;}
+.hm-cell.l1{background:#BFDBFE;}
+.hm-cell.l2{background:#60A5FA;}
+.hm-cell.l3{background:#2563EB;}
+.hm-cell.l4{background:#1E3A8A;}
+.hm-legend{display:flex;align-items:center;gap:4px;margin-top:12px;font-size:10px;color:var(--muted);}
+.hm-legend div{width:12px;height:12px;border-radius:2px;}
+.tip{display:none;position:absolute;bottom:calc(100%+6px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:6px;padding:5px 8px;font-size:10px;white-space:nowrap;z-index:100;}
+.tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--ink);}
 .hm-cell:hover .tip{display:block;}
-.hm-legend{display:flex;align-items:center;gap:5px;margin-top:14px;font-size:11px;color:var(--muted);}
-.hm-legend div{width:14px;height:14px;border-radius:3px;}
 
-.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:0 0 56px;}
-.chart-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px;overflow:hidden;}
-.chart-card-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:6px;}
-.chart-card-sub{font-size:13px;color:var(--muted);margin-bottom:28px;}
-.bar-chart{display:flex;gap:5px;align-items:flex-end;height:150px;}
-.bar-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;}
-.bar-wrap{width:100%;display:flex;align-items:flex-end;height:118px;gap:3px;}
-.bar{flex:1;border-radius:6px 6px 0 0;min-height:2px;cursor:pointer;transition:opacity .18s;}
-.bar:hover{opacity:.75;}
-.bar.h{background:var(--saffron);}
-.bar.r{background:var(--sky);}
-.bar-lbl{font-size:9px;color:var(--muted);text-align:center;white-space:nowrap;font-weight:500;}
-.chart-legend-row{display:flex;gap:16px;margin-top:14px;font-size:12px;color:var(--muted);}
-.chart-legend-row span{display:flex;align-items:center;gap:6px;}
-.dot{width:10px;height:10px;border-radius:2px;display:inline-block;}
+/* DONUT CARD - Defect Rates style */
+.donut-card{background:var(--surface);border-radius:14px;padding:24px;border:1px solid var(--border);box-shadow:var(--shadow);}
+.donut-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;margin:12px 0;}
+.donut-center{position:absolute;text-align:center;}
+.donut-center-num{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--ink);}
+.donut-center-lbl{font-size:10px;color:var(--muted);font-weight:500;}
+.donut-legend{display:flex;flex-direction:column;gap:8px;margin-top:8px;width:100%;}
+.dl-item{display:flex;align-items:center;justify-content:space-between;font-size:12px;}
+.dl-dot{width:8px;height:8px;border-radius:2px;margin-right:6px;flex-shrink:0;}
+.dl-lbl{color:var(--muted);display:flex;align-items:center;}
+.dl-val{font-weight:700;color:var(--ink);}
 
-.wake-chart{display:flex;align-items:flex-end;gap:2px;height:120px;}
-.wb{flex:1;border-radius:4px 4px 0 0;min-height:2px;min-width:0;cursor:pointer;position:relative;}
+/* STATUS CARD */
+.status-card{grid-row:2/4;background:var(--surface);border-radius:14px;padding:24px;border:1px solid var(--border);box-shadow:var(--shadow);display:flex;flex-direction:column;}
+.status-list{display:flex;flex-direction:column;gap:12px;margin-top:12px;flex:1;}
+.status-item{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;display:flex;gap:12px;align-items:flex-start;}
+.status-img{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,var(--border2),var(--blue2));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.si-title{font-size:13px;font-weight:600;color:var(--ink);}
+.si-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.si-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:6px;display:inline-block;}
+.si-badge.active{background:#DCFCE7;color:#16A34A;}
+.si-badge.sched{background:#FEF3C7;color:#B45309;}
+.si-badge.wait{background:#FEE2E2;color:#DC2626;}
+
+/* BAR CHART CARD */
+.bar-chart-card{grid-column:1/3;background:var(--surface);border-radius:14px;padding:24px;border:1px solid var(--border);box-shadow:var(--shadow);}
+.bc-chart{display:flex;align-items:flex-end;gap:6px;height:160px;margin-top:16px;}
+.bc-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;}
+.bc-bars{width:100%;display:flex;align-items:flex-end;gap:2px;height:130px;}
+.bc-bar{flex:1;border-radius:4px 4px 0 0;min-height:2px;cursor:pointer;transition:opacity .15s;}
+.bc-bar:hover{opacity:.75;}
+.bc-bar.h{background:var(--blue);}
+.bc-bar.r{background:var(--accent2);}
+.bc-lbl{font-size:9px;color:var(--muted);font-weight:500;text-align:center;}
+.legend-row{display:flex;gap:16px;margin-top:12px;font-size:11px;color:var(--muted);}
+.legend-row span{display:flex;align-items:center;gap:5px;}
+.ldot{width:8px;height:8px;border-radius:2px;display:inline-block;}
+
+/* WAKE CHART */
+.wake-card{background:var(--surface);border-radius:14px;padding:24px;border:1px solid var(--border);box-shadow:var(--shadow);}
+.wake-chart{display:flex;align-items:flex-end;gap:2px;height:130px;margin-top:16px;}
+.wb{flex:1;border-radius:3px 3px 0 0;min-height:2px;min-width:0;cursor:pointer;position:relative;}
 .wb:hover .tip{display:block;}
-.wb.early{background:var(--sage);}
+.wb.early{background:var(--green);}
 .wb.mid{background:var(--gold);}
-.wb.late{background:#DC2626;}
+.wb.late{background:var(--red);}
 
-.big-quote{border-left:3px solid var(--saffron);padding:32px 48px;margin:56px 0;background:var(--warm);border-radius:0 20px 20px 0;}
-.big-quote blockquote{font-family:'Playfair Display',serif;font-size:clamp(20px,2.5vw,30px);font-style:italic;color:var(--ink);line-height:1.5;}
-.big-quote cite{display:block;margin-top:16px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-style:normal;}
+/* TABLE CARD */
+.table-card{grid-column:1/3;background:var(--surface);border-radius:14px;padding:24px;border:1px solid var(--border);box-shadow:var(--shadow);}
+.filter-row{display:flex;gap:8px;margin-top:12px;align-items:center;}
+.filter-btn{font-size:11px;font-weight:600;padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);cursor:pointer;}
+.filter-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+.data-table{width:100%;border-collapse:collapse;margin-top:14px;font-size:12px;}
+.data-table th{text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:8px 12px;border-bottom:1px solid var(--border);}
+.data-table td{padding:10px 12px;border-bottom:1px solid var(--surface2);color:var(--ink2);}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table tr:hover td{background:var(--surface2);}
+.td-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;}
+.td-badge.done{background:#DCFCE7;color:#16A34A;}
+.td-badge.miss{background:#FEE2E2;color:#DC2626;}
+.td-badge.part{background:#FEF3C7;color:#B45309;}
+.td-rounds{font-weight:700;color:var(--blue);font-size:13px;}
 
-.bento-title{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,52px);font-weight:900;margin-bottom:8px;line-height:1.1;}
-.bento-title em{color:var(--saffron);font-style:italic;}
-.month-bento{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-top:28px;}
-.mb{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 18px;transition:transform .2s,box-shadow .2s,border-color .2s;position:relative;overflow:hidden;}
-.mb::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--saffron);border-radius:3px 0 0 3px;}
-.mb:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(26,16,8,.1);border-color:rgba(201,130,10,.3);}
-.mb-name{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--saffron);font-weight:600;margin-bottom:14px;}
-.mb-stat{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:5px;}
-.mb-stat span:last-child{color:var(--ink);font-weight:500;}
-.mb-prog{height:2px;background:var(--light);border-radius:2px;margin-top:12px;overflow:hidden;}
-.mb-prog-fill{height:100%;background:var(--saffron);border-radius:2px;}
+/* RIGHT COLUMN */
+.right-col{grid-column:4;grid-row:1/6;display:flex;flex-direction:column;gap:16px;}
+.mini-stat-card{background:var(--surface);border-radius:14px;padding:20px;border:1px solid var(--border);box-shadow:var(--shadow);}
+.mini-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.mini-stat{background:var(--surface2);border-radius:10px;padding:16px;}
+.ms-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px;}
+.ms-num{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--ink);line-height:1;}
+.ms-sub{font-size:10px;color:var(--muted);margin-top:4px;}
+.ms-change{font-size:10px;font-weight:600;padding:2px 6px;border-radius:12px;display:inline-block;margin-top:4px;}
+.ms-change.up{background:#DCFCE7;color:#16A34A;}
+.ms-change.dn{background:#FEE2E2;color:#DC2626;}
 
-.phases-section{display:grid;grid-template-columns:280px 1fr;gap:0;border:1px solid var(--border);border-radius:24px;overflow:hidden;margin:56px 0;}
-.phases-intro{background:var(--saffron);padding:48px 36px;display:flex;flex-direction:column;justify-content:center;}
-.phases-intro h2{font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:#fff;line-height:1.1;margin-bottom:12px;}
-.phases-intro p{font-size:13px;color:rgba(255,255,255,.75);line-height:1.6;}
-.phases-cards{background:var(--card);padding:40px 36px;display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start;}
-.phase-card{flex:1;min-width:120px;background:var(--warm);border:1px solid var(--border);border-radius:16px;padding:24px 18px;text-align:center;transition:border-color .2s,transform .2s;}
-.phase-card:hover{border-color:var(--saffron);transform:translateY(-3px);}
-.pc-num{font-family:'Playfair Display',serif;font-size:52px;font-weight:900;color:var(--saffron);line-height:1;}
-.pc-sub{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:4px 0 10px;}
-.pc-dates{font-size:11px;color:var(--ink);}
-.pc-days{font-size:12px;color:var(--gold);margin-top:5px;font-weight:500;}
-
-.rings-section{display:flex;gap:0;flex-wrap:wrap;border:1px solid var(--border);border-radius:24px;overflow:hidden;margin:0 0 56px;background:var(--card);}
-.ring-block{flex:1;min-width:200px;padding:40px 24px;text-align:center;border-right:1px solid var(--border);transition:background .2s;}
-.ring-block:last-child{border-right:none;}
-.ring-block:hover{background:var(--warm);}
+/* RINGS */
+.rings-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ring-block{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;}
 svg.ring-svg{transform:rotate(-90deg);}
 svg.ring-svg circle{fill:none;stroke-linecap:round;}
-.rng-val{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--ink);margin-top:12px;}
-.rng-lbl{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+.rng-val{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--ink);margin-top:8px;}
+.rng-lbl{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
 
-.mobile-section{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);border-radius:24px;overflow:hidden;margin:0 0 56px;}
-.mob-block{padding:40px 28px;text-align:center;border-right:1px solid var(--border);background:var(--card);transition:background .2s;}
-.mob-block:last-child{border-right:none;}
-.mob-block:hover{background:var(--warm);}
-.mob-icon{font-size:28px;margin-bottom:12px;}
-.mob-num{font-family:'Playfair Display',serif;font-size:38px;font-weight:900;color:var(--saffron);line-height:1;}
-.mob-lbl{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:6px;}
+/* TOP PRODUCTS style - Monthly cards */
+.monthly-scroll{display:flex;flex-direction:column;gap:8px;max-height:240px;overflow-y:auto;}
+.monthly-scroll::-webkit-scrollbar{width:4px;}
+.monthly-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+.month-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border-radius:8px;cursor:pointer;transition:background .15s;}
+.month-row:hover{background:#DBEAFE;}
+.month-rank{width:22px;height:22px;border-radius:6px;background:var(--blue);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.month-info{flex:1;min-width:0;}
+.month-name{font-size:12px;font-weight:600;color:var(--ink);}
+.month-prog{height:3px;background:var(--border);border-radius:2px;margin-top:4px;overflow:hidden;}
+.month-prog-fill{height:100%;background:var(--blue);border-radius:2px;}
+.month-val{font-size:12px;font-weight:700;color:var(--blue);flex-shrink:0;}
 
-.timeline-section{background:var(--ink);border-radius:24px;padding:56px;margin:0 0 80px;}
-.tl-heading{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,42px);font-weight:900;color:#fff;margin-bottom:8px;}
-.tl-heading em{color:var(--saffron);font-style:italic;}
-.tl-sub{font-size:14px;color:#8A6040;margin-bottom:48px;}
-.tl-list{position:relative;padding-left:32px;}
-.tl-list::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:1px;background:linear-gradient(to bottom,var(--saffron),rgba(232,93,4,.1));}
-.tl-item{position:relative;margin-bottom:36px;}
+/* MILESTONE CARD */
+.milestone-card{background:var(--surface);border-radius:14px;padding:20px;border:1px solid var(--border);box-shadow:var(--shadow);}
+.tl-list{position:relative;padding-left:24px;}
+.tl-list::before{content:'';position:absolute;left:6px;top:4px;bottom:4px;width:1px;background:linear-gradient(to bottom,var(--blue),var(--border));}
+.tl-item{position:relative;margin-bottom:16px;}
 .tl-item:last-child{margin-bottom:0;}
-.tl-dot{position:absolute;left:-38px;top:4px;width:14px;height:14px;border-radius:50%;background:var(--saffron);border:2px solid var(--ink);box-shadow:0 0 0 3px rgba(232,93,4,.25);}
-.tl-date{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--saffron);font-weight:500;margin-bottom:4px;}
-.tl-text{font-size:15px;color:#C8B090;line-height:1.5;}
-.tl-text strong{color:#fff;font-weight:500;}
+.tl-dot{position:absolute;left:-21px;top:3px;width:10px;height:10px;border-radius:50%;background:var(--blue);border:2px solid var(--surface);box-shadow:0 0 0 2px var(--blue2);}
+.tl-date{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);font-weight:600;margin-bottom:2px;}
+.tl-text{font-size:11px;color:var(--ink2);line-height:1.5;}
+.tl-text strong{color:var(--ink);font-weight:600;}
 
-footer{text-align:center;padding:60px 32px 80px;background:var(--warm);border-top:1px solid var(--border);}
-.footer-om{font-family:'Noto Serif Devanagari',serif;font-size:48px;color:var(--saffron);display:block;margin-bottom:16px;}
-.footer-quote{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(17px,2vw,24px);color:var(--ink);max-width:640px;margin:0 auto 16px;line-height:1.5;}
-.footer-sub{font-size:13px;color:var(--muted);letter-spacing:.1em;}
+/* LOADING */
+#loader{position:fixed;inset:0;background:var(--sidebar);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .7s ease;}
+.loader-om{font-family:'Noto Serif Devanagari',serif;font-size:72px;color:#fff;animation:lp 1.8s ease-in-out infinite;}
+@keyframes lp{0%,100%{opacity:.3;transform:scale(.9)}50%{opacity:1;transform:scale(1)}}
+.loader-txt{color:rgba(255,255,255,.5);font-size:12px;letter-spacing:.25em;margin-top:16px;text-transform:uppercase;}
+#loader.out{opacity:0;pointer-events:none;}
+#app{opacity:0;transition:opacity .7s ease;}
 
-.err{background:#FEF2F2;border:1px solid #FECACA;border-radius:16px;padding:24px;color:#991B1B;font-size:13px;text-align:center;}
+.add-btn{width:32px;height:32px;border-radius:8px;background:var(--blue);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.err{background:#EFF6FF;border:1px solid var(--border2);border-radius:10px;padding:20px;color:var(--blue);font-size:12px;text-align:center;}
 
-@media(max-width:900px){
-  .hero{grid-template-columns:1fr;}
-  .hero-left{min-height:60vh;padding:52px 28px;}
-  .hero-right{grid-template-rows:auto auto;}
-  .hero-stat-big{padding:36px 28px;}
-  .hm-section{grid-template-columns:1fr;}
-  .hm-sidebar{order:-1;}
-  .charts-row{grid-template-columns:1fr;}
-  .phases-section{grid-template-columns:1fr;}
-  .mobile-section{grid-template-columns:repeat(2,1fr);}
-  .mob-block:nth-child(2){border-right:none;}
-  .mob-block:nth-child(3),.mob-block:nth-child(4){border-top:1px solid var(--border);}
-  .rings-section{flex-direction:column;}
-  .ring-block{border-right:none;border-bottom:1px solid var(--border);}
-  .ring-block:last-child{border-bottom:none;}
-  .timeline-section{padding:36px 28px;}
-  .wrap{padding:0 20px;}
+@media(max-width:1200px){
+  .content{grid-template-columns:1fr 1fr;grid-template-rows:auto;}
+  .right-col{grid-column:1/3;}
+  .heatmap-card,.bar-chart-card,.table-card{grid-column:1/3;}
+  .status-card{grid-row:auto;}
+}
+@media(max-width:700px){
+  .content{grid-template-columns:1fr;padding:12px;}
+  .right-col,.heatmap-card,.bar-chart-card,.table-card{grid-column:1;}
+  .status-card{grid-row:auto;}
+  .sidebar{width:48px;}
+  .main{margin-left:48px;}
 }
 </style>
 </head>
@@ -191,147 +238,232 @@ footer{text-align:center;padding:60px 32px 80px;background:var(--warm);border-to
   <p class="loader-txt">Fetching your sādhana…</p>
 </div>
 
-<div id="app" style="opacity:0;transition:opacity .8s ease">
+<div id="app">
 
-<section class="hero">
-  <div class="hero-left">
-    <div class="hero-eyebrow">Sādhana Live Dashboard</div>
-    <h1 class="hero-title">Every<br>Round.<br><em>Complete.</em></h1>
-    <p class="hero-desc">A living record of spiritual practice — chanting, hearing, reading, and rising before the sun.</p>
-    <div class="live-pill">
-      <span class="live-dot"></span>
-      Live · Google Sheets
-    </div>
-  </div>
-  <div class="hero-right">
-    <div class="hero-stat-big" data-icon="📿">
-      <div class="hsb-label">Days Consistent</div>
-      <div class="hsb-num" id="heroConsistent">—</div>
-      <div class="hsb-sub" id="heroDateRange">Loading…</div>
-    </div>
-    <div class="hero-stat-big" data-icon="⏰">
-      <div class="hsb-label">Total Practice Time</div>
-      <div class="hsb-num" id="heroHours">—</div>
-      <div class="hsb-sub">Hearing + Reading combined</div>
-    </div>
-  </div>
-</section>
-
-<div class="marquee-strip">
-  <div class="marquee-inner">
-    <span class="marquee-item">Chanting Rounds</span>
-    <span class="marquee-item">Hearing Scriptures</span>
-    <span class="marquee-item">Reading Scriptures</span>
-    <span class="marquee-item">Rising Early</span>
-    <span class="marquee-item">Consistent Practice</span>
-    <span class="marquee-item">Spiritual Growth</span>
-    <span class="marquee-item">Chanting Rounds</span>
-    <span class="marquee-item">Hearing Scriptures</span>
-    <span class="marquee-item">Reading Scriptures</span>
-    <span class="marquee-item">Rising Early</span>
-    <span class="marquee-item">Consistent Practice</span>
-    <span class="marquee-item">Spiritual Growth</span>
-  </div>
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-logo">ॐ</div>
+  <div class="nav-item active" title="Dashboard">⊞</div>
+  <div class="nav-item" title="Practice">📿</div>
+  <div class="nav-item" title="Hearing">🎧</div>
+  <div class="nav-item" title="Reading">📖</div>
+  <div class="nav-sep"></div>
+  <div class="nav-item" title="Calendar">📅</div>
+  <div class="nav-item" title="Goals">🎯</div>
+  <div class="nav-item" title="Settings">⚙</div>
 </div>
 
-<div class="wrap" style="margin-top:64px">
-  <div class="sec-label">Daily Practice Heatmap</div>
-  <div class="hm-section">
-    <div class="hm-main">
-      <div class="heatmap" id="heatmap"></div>
+<!-- MAIN -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div class="topbar-welcome">Welcome back!</div>
+      <div class="topbar-name">Sādhana Live</div>
+    </div>
+    <div class="search-box">
+      <span style="color:var(--muted);font-size:14px">🔍</span>
+      <input type="text" placeholder="Search Here">
+    </div>
+    <div class="topbar-icon">🔔</div>
+    <div class="topbar-icon">⊞</div>
+    <div class="live-badge"><span class="live-dot"></span> Live · Sheets</div>
+    <div class="avatar">SP</div>
+    <span style="font-size:14px;color:var(--muted);cursor:pointer">▾</span>
+  </div>
+
+  <!-- CONTENT GRID -->
+  <div class="content">
+
+    <!-- STAT CARDS ROW -->
+    <div class="stat-card" data-icon="📿">
+      <div class="sc-row">
+        <div class="sc-label">Total Days Consistent</div>
+        <div class="sc-icon blue">📿</div>
+      </div>
+      <div class="sc-num" id="sc1">—</div>
+      <div class="sc-row">
+        <div class="sc-sub" id="sc1sub">Loading…</div>
+        <div class="sc-change up" id="sc1chg">+Live</div>
+      </div>
+    </div>
+
+    <div class="stat-card" data-icon="📊">
+      <div class="sc-row">
+        <div class="sc-label">Practice Efficiency</div>
+        <div class="sc-icon teal">📊</div>
+      </div>
+      <div class="sc-num" id="sc2">—</div>
+      <div class="sc-row">
+        <div class="sc-sub">Hearing + Reading days</div>
+        <div class="sc-change up" id="sc2chg">+8%</div>
+      </div>
+    </div>
+
+    <div class="stat-card" data-icon="⏰">
+      <div class="sc-row">
+        <div class="sc-label">Total Practice Hours</div>
+        <div class="sc-icon orange">⏰</div>
+      </div>
+      <div class="sc-num" id="sc3">—</div>
+      <div class="sc-row">
+        <div class="sc-sub">Hearing + Reading combined</div>
+        <div class="sc-change up">↑ Growing</div>
+      </div>
+    </div>
+
+    <!-- STATUS CARD — right column row 1–2 -->
+    <div class="status-card" style="grid-row:1/4;grid-column:4">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Practice Line Status</div>
+          <div class="card-sub">Daily activity overview</div>
+        </div>
+        <button class="add-btn">+</button>
+      </div>
+      <div class="status-list" id="statusList">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- HEATMAP CARD -->
+    <div class="heatmap-card" style="grid-column:1/4">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Daily Practice Heatmap</div>
+          <div class="card-sub">Each cell = one day of recorded practice. Darker = more time</div>
+        </div>
+        <div class="month-tabs">
+          <div class="tab active">All</div>
+          <div class="tab">Monthly</div>
+        </div>
+      </div>
+      <div class="heatmap-grid" id="heatmap"></div>
       <div class="hm-legend">
         Less
-        <div style="background:#F0E9D8;border:1px solid #EDD9B8"></div>
-        <div style="background:rgba(201,130,10,.22)"></div>
-        <div style="background:rgba(201,130,10,.5)"></div>
-        <div style="background:rgba(232,93,4,.72)"></div>
-        <div style="background:var(--saffron)"></div>
+        <div style="background:#EFF6FF;border:1px solid #DBEAFE"></div>
+        <div style="background:#BFDBFE"></div>
+        <div style="background:#60A5FA"></div>
+        <div style="background:#2563EB"></div>
+        <div style="background:#1E3A8A"></div>
         More
       </div>
     </div>
-    <div class="hm-sidebar">
-      <div>
-        <div class="hm-sidebar-title">Hearing<br>+ Reading</div>
-        <div class="hm-sidebar-sub">Each cell is one day of recorded practice. Brighter = more time dedicated.</div>
-      </div>
-      <div class="hm-sidebar-stats" id="hmSidebarStats"></div>
-    </div>
-  </div>
-</div>
 
-<div class="wrap">
-  <div class="sec-label">Monthly Breakdown</div>
-  <div class="charts-row">
-    <div class="chart-card">
-      <div class="chart-card-title">Hearing & Reading</div>
-      <div class="chart-card-sub">Monthly minutes by practice type</div>
-      <div class="bar-chart" id="monthlyBars"></div>
-      <div class="chart-legend-row">
-        <span><span class="dot" style="background:var(--saffron)"></span>Hearing</span>
-        <span><span class="dot" style="background:var(--sky)"></span>Reading</span>
+    <!-- BAR CHART -->
+    <div class="bar-chart-card" style="grid-column:1/3">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Hearing & Reading by Month</div>
+          <div class="card-sub">Monthly minutes by practice type</div>
+        </div>
+        <div class="month-tabs">
+          <div class="tab active">Monthly</div>
+        </div>
+      </div>
+      <div class="bc-chart" id="monthlyBars"></div>
+      <div class="legend-row">
+        <span><span class="ldot" style="background:var(--blue)"></span>Hearing</span>
+        <span><span class="ldot" style="background:var(--accent2)"></span>Reading</span>
       </div>
     </div>
-    <div class="chart-card">
-      <div class="chart-card-title">Wake-Up Pattern</div>
-      <div class="chart-card-sub">Each bar = one morning's rise time</div>
+
+    <!-- DONUT CARD -->
+    <div class="donut-card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Consistency Rates</div>
+          <div class="card-sub">Practice completion breakdown</div>
+        </div>
+        <span style="font-size:18px;color:var(--muted);cursor:pointer">⋯</span>
+      </div>
+      <div class="donut-wrap">
+        <svg width="140" height="140" viewBox="0 0 140 140">
+          <!-- BG rings -->
+          <circle cx="70" cy="70" r="54" fill="none" stroke="#EFF6FF" stroke-width="16"/>
+          <circle cx="70" cy="70" r="38" fill="none" stroke="#EFF6FF" stroke-width="12"/>
+          <circle cx="70" cy="70" r="24" fill="none" stroke="#EFF6FF" stroke-width="8"/>
+          <!-- Data rings -->
+          <circle cx="70" cy="70" r="54" fill="none" stroke="var(--blue)" stroke-width="16"
+            stroke-dasharray="0 339" stroke-linecap="round" id="donutR1" style="transform:rotate(-90deg);transform-origin:70px 70px;transition:stroke-dasharray 1.2s ease"/>
+          <circle cx="70" cy="70" r="38" fill="none" stroke="var(--teal)" stroke-width="12"
+            stroke-dasharray="0 239" stroke-linecap="round" id="donutR2" style="transform:rotate(-90deg);transform-origin:70px 70px;transition:stroke-dasharray 1.2s ease"/>
+          <circle cx="70" cy="70" r="24" fill="none" stroke="var(--green)" stroke-width="8"
+            stroke-dasharray="0 151" stroke-linecap="round" id="donutR3" style="transform:rotate(-90deg);transform-origin:70px 70px;transition:stroke-dasharray 1.2s ease"/>
+        </svg>
+        <div class="donut-center" style="top:50%;left:50%;transform:translate(-50%,-50%)">
+          <div class="donut-center-num" id="donutCenter">—</div>
+          <div class="donut-center-lbl">Days</div>
+        </div>
+      </div>
+      <div class="donut-legend" id="donutLegend"></div>
+    </div>
+
+    <!-- WAKE CHART -->
+    <div class="wake-card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Wake-Up Pattern</div>
+          <div class="card-sub">Each bar = one morning's rise time</div>
+        </div>
+      </div>
       <div class="wake-chart" id="wakeChart"></div>
-      <div class="chart-legend-row">
-        <span><span class="dot" style="background:var(--sage)"></span>Before 5 AM</span>
-        <span><span class="dot" style="background:var(--gold)"></span>5–8 AM</span>
-        <span><span class="dot" style="background:#DC2626"></span>After 8 AM</span>
+      <div class="legend-row" style="margin-top:10px">
+        <span><span class="ldot" style="background:var(--green)"></span>Before 5 AM</span>
+        <span><span class="ldot" style="background:var(--gold)"></span>5–8 AM</span>
+        <span><span class="ldot" style="background:var(--red)"></span>After 8 AM</span>
       </div>
     </div>
-  </div>
-</div>
 
-<div class="wrap">
-  <div class="big-quote">
-    <blockquote>"Chant the holy name, chant the holy name, chant the holy name of the Lord."</blockquote>
-    <cite>— Śrīla Prabhupāda &nbsp;·&nbsp; Every round complete</cite>
-  </div>
-</div>
-
-<div class="wrap" style="margin-top:64px">
-  <div class="sec-label">Monthly Summary</div>
-  <div class="bento-title">A month-by-<em>month</em><br>view of your journey.</div>
-  <div class="month-bento" id="monthGrid"></div>
-</div>
-
-<div class="wrap" style="margin-top:64px">
-  <div class="sec-label">Chanting Progression</div>
-  <div class="phases-section">
-    <div class="phases-intro">
-      <h2>Rounds per Day</h2>
-      <p>Each phase represents a commitment to a fixed number of rounds — a stepping stone of devotion.</p>
+    <!-- PENDING / DATA TABLE -->
+    <div class="table-card" style="grid-column:1/3">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Recent Practice Log</div>
+          <div class="card-sub">Last recorded sessions</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="filter-btn active">🔽 Filter</div>
+          <div class="filter-btn">Monthly ▾</div>
+        </div>
+      </div>
+      <table class="data-table" id="dataTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Rounds</th>
+            <th>Hearing</th>
+            <th>Reading</th>
+            <th>Wake Time</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
     </div>
-    <div class="phases-cards" id="phases"></div>
+
+    <!-- DONUT + RIGHT: Monthly Top Products -->
+    <div class="mini-stat-card" style="grid-column:4">
+      <div class="card-title" style="margin-bottom:12px">Top Months by Practice</div>
+      <div class="monthly-scroll" id="topMonths"></div>
+    </div>
+
+    <!-- RINGS -->
+    <div class="mini-stat-card" style="grid-column:4">
+      <div class="card-title" style="margin-bottom:12px">Practice Rings</div>
+      <div class="rings-row" id="rings"></div>
+    </div>
+
+    <!-- MILESTONES -->
+    <div class="milestone-card" style="grid-column:4">
+      <div class="card-title" style="margin-bottom:12px">Key Milestones</div>
+      <div class="tl-list" id="milestones"></div>
+    </div>
+
   </div>
 </div>
-
-<div class="wrap" style="margin-top:56px">
-  <div class="sec-label">Practice Rings</div>
-  <div class="rings-section" id="rings"></div>
-</div>
-
-<div class="wrap" style="margin-top:56px">
-  <div class="sec-label">Mobile Usage</div>
-  <div class="mobile-section" id="mobSection"></div>
-</div>
-
-<div class="wrap" style="margin-top:56px">
-  <div class="timeline-section">
-    <div class="tl-heading">Key <em>Milestones</em></div>
-    <div class="tl-sub">Moments that shaped the practice.</div>
-    <div class="tl-list" id="milestones"></div>
-  </div>
-</div>
-
-<footer>
-  <span class="footer-om">ॐ</span>
-  <div class="footer-quote">"Every day recorded. Every round complete."</div>
-  <div class="footer-sub">Sādhana Live Dashboard · Powered by Google Sheets</div>
-</footer>
-
 </div>
 
 <script>
@@ -370,12 +502,12 @@ function monthLabel(k){
   const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const p=k.split('/');return M[+p[0]-1]+" '"+p[1];
 }
-function makeRing(pct,color,label,val,size=90){
-  const r=(size-14)/2,circ=2*Math.PI*r,dash=circ*Math.min(pct,100)/100;
+function makeRing(pct,color,label,val){
+  const r=34,circ=2*Math.PI*r,dash=circ*Math.min(pct,100)/100;
   return `<div class="ring-block">
-    <svg class="ring-svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-      <circle cx="${size/2}" cy="${size/2}" r="${r}" stroke="#F0E9D8" stroke-width="10"/>
-      <circle cx="${size/2}" cy="${size/2}" r="${r}" stroke="${color}" stroke-width="10"
+    <svg class="ring-svg" width="80" height="80" viewBox="0 0 80 80">
+      <circle cx="40" cy="40" r="${r}" stroke="#DBEAFE" stroke-width="8"/>
+      <circle cx="40" cy="40" r="${r}" stroke="${color}" stroke-width="8"
         stroke-dasharray="${dash} ${circ-dash}" fill="none" stroke-linecap="round"/>
     </svg>
     <div class="rng-val">${val}</div>
@@ -407,29 +539,25 @@ function render(entries){
   const total=entries.length;
   const totalH=entries.reduce((a,e)=>a+e.hearing,0);
   const totalR=entries.reduce((a,e)=>a+e.reading,0);
-  const mobE=entries.filter(e=>e.mobile>0);
-  const avgMob=mobE.length?mobE.reduce((a,e)=>a+e.mobile,0)/mobE.length:0;
   const earlyDays=entries.filter(e=>parseWake(e.wake)<5).length;
   const hearDays=entries.filter(e=>e.hearing>0).length;
   const readDays=entries.filter(e=>e.reading>0).length;
+  const effPct=Math.round((hearDays+readDays)/(total*2)*100);
 
-  document.getElementById('heroConsistent').textContent=total+'+';
-  document.getElementById('heroDateRange').textContent=entries[0].date+' – '+entries[entries.length-1].date;
-  document.getElementById('heroHours').textContent=Math.round((totalH+totalR)/60)+'h';
+  // Stat cards
+  document.getElementById('sc1').textContent=total+'+';
+  document.getElementById('sc1sub').textContent=entries[0].date+' – '+entries[entries.length-1].date;
+  document.getElementById('sc2').textContent=effPct+'%';
+  document.getElementById('sc3').textContent=Math.round((totalH+totalR)/60)+'h';
 
+  // Heatmap
   document.getElementById('heatmap').innerHTML=entries.map(e=>{
     const t=e.hearing+e.reading;
     const lvl=t===0?'l0':t<=20?'l1':t<=60?'l2':t<=120?'l3':'l4';
     return `<div class="hm-cell ${lvl}"><div class="tip">${e.date}<br>Hear: ${e.hearing}m · Read: ${e.reading}m</div></div>`;
   }).join('');
 
-  document.getElementById('hmSidebarStats').innerHTML=[
-    {l:'Hearing Days',v:hearDays},
-    {l:'Reading Days',v:readDays},
-    {l:'Pre-5 AM Days',v:earlyDays},
-    {l:'Total Days',v:total},
-  ].map(s=>`<div class="hms-item"><span class="hms-lbl">${s.l}</span><span class="hms-val">${s.v}</span></div>`).join('');
-
+  // Monthly data
   const mm={};
   entries.forEach(e=>{
     const k=monthKey(e.date);if(!k)return;
@@ -440,80 +568,111 @@ function render(entries){
   const mKeys=Object.keys(mm);
   const maxBar=Math.max(...mKeys.map(k=>mm[k].h+mm[k].r),1);
 
+  // Bar chart
   document.getElementById('monthlyBars').innerHTML=mKeys.map(k=>{
-    const hh=Math.round(mm[k].h/maxBar*110),rr=Math.round(mm[k].r/maxBar*110);
-    return `<div class="bar-group">
-      <div class="bar-wrap">
-        <div class="bar h" style="height:${hh}px" title="${monthLabel(k)} Hearing: ${mm[k].h}m"></div>
-        <div class="bar r" style="height:${rr}px" title="${monthLabel(k)} Reading: ${mm[k].r}m"></div>
+    const hh=Math.max(4,Math.round(mm[k].h/maxBar*120));
+    const rr=Math.max(4,Math.round(mm[k].r/maxBar*120));
+    return `<div class="bc-group">
+      <div class="bc-bars">
+        <div class="bc-bar h" style="height:${hh}px" title="${monthLabel(k)} Hearing: ${mm[k].h}m"></div>
+        <div class="bc-bar r" style="height:${rr}px" title="${monthLabel(k)} Reading: ${mm[k].r}m"></div>
       </div>
-      <div class="bar-lbl">${monthLabel(k).split(' ')[0]}</div>
+      <div class="bc-lbl">${monthLabel(k).split(' ')[0]}</div>
     </div>`;
   }).join('');
 
-  document.getElementById('monthGrid').innerHTML=mKeys.map(k=>{
-    const d=mm[k],avgH=d.days?Math.round(d.h/d.days):0,avgR=d.days?Math.round(d.r/d.days):0;
-    const pct=Math.round((d.h+d.r)/maxBar*100);
-    return `<div class="mb">
-      <div class="mb-name">${monthLabel(k)}</div>
-      <div class="mb-stat"><span>Days</span><span>${d.days}</span></div>
-      <div class="mb-stat"><span>Avg Hear</span><span>${avgH}m</span></div>
-      <div class="mb-stat"><span>Avg Read</span><span>${avgR}m</span></div>
-      <div class="mb-stat"><span>Pre-5AM</span><span>${d.early}</span></div>
-      <div class="mb-prog"><div class="mb-prog-fill" style="width:${pct}%"></div></div>
-    </div>`;
-  }).join('');
-
-  const pm={};
-  entries.forEach(e=>{
-    if(!pm[e.rounds])pm[e.rounds]={start:e.date,end:e.date,days:0};
-    pm[e.rounds].end=e.date;pm[e.rounds].days++;
-  });
-  document.getElementById('phases').innerHTML=Object.keys(pm).sort((a,b)=>+a-+b).map(r=>{
-    const p=pm[r];
-    return `<div class="phase-card">
-      <div class="pc-num">${r}</div>
-      <div class="pc-sub">Rounds / Day</div>
-      <div class="pc-dates">${p.start}<br>${p.end}</div>
-      <div class="pc-days">${p.days} days</div>
-    </div>`;
-  }).join('');
-
+  // Wake chart
   document.getElementById('wakeChart').innerHTML=entries.map(e=>{
     const h=parseWake(e.wake),cls=h<5?'early':h<8?'mid':'late';
-    const bh=Math.max(4,Math.round((14-h)/10*100));
-    return `<div class="wb ${cls}" style="height:${bh}px"><div class="tip">${e.date}<br>${e.wake}</div></div>`;
+    const bh=Math.max(4,Math.round((14-Math.min(h,13))/10*110));
+    return `<div class="wb ${cls}" style="height:${bh}px"><div class="tip">${e.date}<br>${e.wake||'?'}</div></div>`;
   }).join('');
 
-  document.getElementById('rings').innerHTML=
-    makeRing(Math.round(hearDays/total*100),'#E85D04','Hearing Days',hearDays)+
-    makeRing(Math.round(readDays/total*100),'#3B82F6','Reading Days',readDays)+
-    makeRing(Math.round(earlyDays/total*100),'#16A34A','Pre-5 AM',earlyDays)+
-    makeRing(100,'#C9820A','Rounds Done',total+'+');
+  // Status list
+  const latestEntries=entries.slice(-6).reverse();
+  document.getElementById('statusList').innerHTML=latestEntries.map((e,i)=>{
+    const done=e.hearing>0&&e.reading>0;
+    const partial=e.hearing>0||e.reading>0;
+    const badgeCls=done?'active':partial?'sched':'wait';
+    const badgeTxt=done?'Complete':partial?'Partial':'Chanting Only';
+    const icons=['📿','🎧','📖','⏰','🌅','✨'];
+    return `<div class="status-item">
+      <div class="status-img">${icons[i%icons.length]}</div>
+      <div>
+        <div class="si-title">${e.date}</div>
+        <div class="si-sub">Rounds: ${e.rounds} · Hear: ${e.hearing}m · Read: ${e.reading}m</div>
+        <div class="si-badge ${badgeCls}">${badgeTxt}</div>
+      </div>
+    </div>`;
+  }).join('');
 
-  const totalMob=entries.reduce((a,e)=>a+e.mobile,0);
-  const maxMob=Math.max(...entries.map(e=>e.mobile));
-  const lowMob=entries.filter(e=>e.mobile>0&&e.mobile<300).length;
-  document.getElementById('mobSection').innerHTML=[
-    {icon:'📱',v:Math.round(totalMob/60)+'h',l:'Total Usage'},
-    {icon:'📊',v:Math.round(avgMob/60)+'h',l:'Daily Average'},
-    {icon:'⚡',v:Math.round(maxMob/60)+'h',l:'Peak Day'},
-    {icon:'✅',v:lowMob,l:'Days Under 5h'},
-  ].map(m=>`<div class="mob-block">
-    <div class="mob-icon">${m.icon}</div>
-    <div class="mob-num">${m.v}</div>
-    <div class="mob-lbl">${m.l}</div>
+  // Donut rings
+  document.getElementById('donutCenter').textContent=total;
+  setTimeout(()=>{
+    const r1=2*Math.PI*54,r2=2*Math.PI*38,r3=2*Math.PI*24;
+    document.getElementById('donutR1').setAttribute('stroke-dasharray',`${r1*hearDays/total} ${r1-(r1*hearDays/total)}`);
+    document.getElementById('donutR2').setAttribute('stroke-dasharray',`${r2*readDays/total} ${r2-(r2*readDays/total)}`);
+    document.getElementById('donutR3').setAttribute('stroke-dasharray',`${r3*earlyDays/total} ${r3-(r3*earlyDays/total)}`);
+  },300);
+  document.getElementById('donutLegend').innerHTML=[
+    {c:'var(--blue)',l:'Hearing Days',v:hearDays},
+    {c:'var(--teal)',l:'Reading Days',v:readDays},
+    {c:'var(--green)',l:'Pre-5 AM',v:earlyDays},
+  ].map(d=>`<div class="dl-item">
+    <div class="dl-lbl"><div class="dl-dot" style="background:${d.c}"></div>${d.l}</div>
+    <div class="dl-val">${d.v}</div>
   </div>`).join('');
 
+  // Table (last 10 entries)
+  const recent=entries.slice(-10).reverse();
+  document.getElementById('tableBody').innerHTML=recent.map((e,i)=>{
+    const done=e.hearing>0&&e.reading>0;
+    const partial=e.hearing>0||e.reading>0;
+    const cls=done?'done':partial?'part':'miss';
+    const lbl=done?'Complete':partial?'Partial':'Missed';
+    return `<tr>
+      <td>#${(recent.length-i).toString().padStart(4,'0')}</td>
+      <td>${e.date}</td>
+      <td class="td-rounds">${e.rounds}r</td>
+      <td>${e.hearing}m</td>
+      <td>${e.reading}m</td>
+      <td>${e.wake||'—'}</td>
+      <td><span class="td-badge ${cls}">${lbl}</span></td>
+    </tr>`;
+  }).join('');
+
+  // Top months
+  const sortedMonths=mKeys.sort((a,b)=>(mm[b].h+mm[b].r)-(mm[a].h+mm[a].r));
+  document.getElementById('topMonths').innerHTML=sortedMonths.map((k,i)=>{
+    const total_mins=mm[k].h+mm[k].r;
+    const pct=Math.round(total_mins/maxBar*100);
+    return `<div class="month-row">
+      <div class="month-rank">${i+1}</div>
+      <div class="month-info">
+        <div class="month-name">${monthLabel(k)}</div>
+        <div class="month-prog"><div class="month-prog-fill" style="width:${pct}%"></div></div>
+      </div>
+      <div class="month-val">${Math.round(total_mins/60)}h</div>
+    </div>`;
+  }).join('');
+
+  // Rings
+  document.getElementById('rings').innerHTML=
+    makeRing(Math.round(hearDays/total*100),'#2563EB','Hearing',hearDays)+
+    makeRing(Math.round(readDays/total*100),'#0D9488','Reading',readDays)+
+    makeRing(Math.round(earlyDays/total*100),'#22C55E','Pre-5AM',earlyDays)+
+    makeRing(100,'#F59E0B','Days',total+'+');
+
+  // Milestones
   const ms=[];
   ms.push({date:entries[0].date,text:`Journey begins · <strong>${entries[0].rounds} rounds</strong> per day`});
   let prev=entries[0].rounds;
-  entries.forEach(e=>{if(e.rounds!==prev){ms.push({date:e.date,text:`Rounds increased to <strong>${e.rounds} rounds</strong> per day`});prev=e.rounds;}});
+  entries.forEach(e=>{if(e.rounds!==prev){ms.push({date:e.date,text:`Rounds increased to <strong>${e.rounds}</strong> per day`});prev=e.rounds;}});
   const maxH=entries.reduce((a,e)=>e.hearing>a.hearing?e:a,entries[0]);
-  ms.push({date:maxH.date,text:`Peak hearing session — <strong>${maxH.hearing} minutes</strong>`});
-  ms.push({date:entries[entries.length-1].date,text:`Latest entry — <strong>${total} days</strong> of recorded practice`});
+  ms.push({date:maxH.date,text:`Peak hearing — <strong>${maxH.hearing} minutes</strong>`});
+  ms.push({date:entries[entries.length-1].date,text:`Latest entry · <strong>${total} days</strong> total`});
   ms.sort((a,b)=>a.date.localeCompare(b.date));
-  document.getElementById('milestones').innerHTML=ms.map(m=>
+  document.getElementById('milestones').innerHTML=ms.slice(0,5).map(m=>
     `<div class="tl-item">
       <div class="tl-dot"></div>
       <div class="tl-date">${m.date}</div>
